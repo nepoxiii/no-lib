@@ -1,8 +1,8 @@
 <template>
   <span class="no-input-text" :class="{ fullWidth }">
-    <span v-if="isSlot">
+    <label v-if="isSlot">
       <slot />
-    </span>
+    </label>
     <span class="input-text">
       <input
         v-model="text"
@@ -98,12 +98,18 @@
 
   .input-text input::placeholder
   {
+    color: rgb(210,210,210);
     transition: .2s;
   }
 
   .input-text input:focus::placeholder
   {
-    opacity: .3;
+    opacity: .2;
+  }
+
+  .no-input-text label
+  {
+    padding: 0 5px;
   }
 
 </style>

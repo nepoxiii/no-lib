@@ -10,16 +10,18 @@
   --vert-2: #6ECC6B;
   --bleu: #7F7EF2;
   --bleu-2: #6766EF;
+  --bleu-3: #a09ff3;
   --bleu-rgb: 127,126,242;
   --light-bleu: #C7DEF4;
   --or: #FFC875;
+  --orange: #ffb33c;
   --font-color: black;
 }
 
 ::selection
 {
   color: white;
-  background-color: var(--rouge);
+  background-color: var(--bleu-3);
 }
 
 .black_mode
@@ -86,3 +88,4 @@
   background-color: rgb(150,150,150);
   color: white;
 }
+

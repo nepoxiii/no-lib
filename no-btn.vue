@@ -1,6 +1,6 @@
 <template>
   <button class="no-btn">
-
+    <slot />
   </button>
 </template>
 
@@ -8,6 +8,11 @@
 
   export default {
     name: "no-btn",
+    computed: {
+      isSlot () {
+        return !!this.$slots?.default?.length
+      }
+    },
   }
 
 </script>
@@ -16,15 +21,23 @@
 
   .no-btn
   {
+    border: none;
     width: fit-content;
     height: fit-content;
     background-color: var(--bleu);
     border-radius: 4px;
     padding: 5px 20px;
-    color: white !important;
     cursor: pointer;
     position: relative;
     user-select: none;
+    min-height: 20px;
+    min-width: 60px;
+    transition: .2s;
+  }
+
+  .no-btn >>> *
+  {
+    color: white;
     transition: .2s;
   }
 
@@ -50,15 +63,19 @@
     opacity: 1;
   }
 
-  .no-btn:hover
+  .no-btn:hover >>> *
   {
-    color: var(--bleu) !important;
+    color: var(--bleu);
   }
 
   .no-btn:active
   {
     background-color: var(--bleu-2);
-    color: var(--bleu-2) !important;
+  }
+
+  .no-btn:active >>> *
+  {
+    color: var(--bleu-2);
   }
 
   .no-btn:disabled
@@ -67,82 +84,102 @@
     filter: grayscale(100%);
   }
 
-  .no-btn-danger
+  .no-btn.danger
   {
     background-color: var(--rouge);
   }
 
-  .no-btn-danger:hover
+  .no-btn.danger:hover >>> *
   {
-    color: var(--rouge) !important;
+    color: var(--rouge);
   }
 
-  .no-btn-danger:active
+  .no-btn.danger:active
   {
-    color: var(--rouge-2) !important;
     background-color: var(--rouge-2);
   }
 
-  .no-btn-danger:after
+  .no-btn.danger:active >>> *
+  {
+    color: var(--rouge-2);
+  }
+
+  .no-btn.danger:after
   {
     content: '😈';
   }
 
-  .no-btn-green
+  .no-btn.green
   {
     background-color: var(--vert);
   }
 
-  .no-btn-green:hover
+  .no-btn.green:hover >>> *
   {
-    color: var(--vert) !important;
+    color: var(--vert);
   }
 
-  .no-btn-green:active
+  .no-btn.green:active
   {
-    color: var(--vert-2) !important;
     background-color: var(--vert-2);
   }
 
-  .no-btn-green:after
+  .no-btn.green:active >>> *
+  {
+    color: var(--vert-2);
+  }
+
+  .no-btn.green:after
   {
     content: '🚀';
   }
 
-  .no-btn-secondary
+  .no-btn.secondary
   {
-    color: var(--bleu) !important;
     background-color: white;
   }
 
-  .no-btn-secondary:hover
+  .no-btn.secondary >>> *
   {
-    color: white !important;
+    color: var(--bleu);
   }
 
-  .no-btn-secondary:active
+  .no-btn.secondary:hover >>> *
   {
-    color: rgb(240,240,240) !important;
+    color: white;
+  }
+
+  .no-btn.secondary:active
+  {
     background-color: rgb(240,240,240);
   }
 
-  .no-btn-big-danger
+  .no-btn.secondary:active >>> *
+  {
+    color: rgb(240,240,240);
+  }
+
+  .no-btn.big-danger
   {
     background-color: rgb(70,70,70);
   }
 
-  .no-btn-big-danger:hover
+  .no-btn.big-danger:hover >>> *
   {
-    color: rgb(70,70,70) !important;
+    color: rgb(70,70,70);
   }
 
-  .no-btn-big-danger:active
+  .no-btn.big-danger:active
   {
-    color: black !important;
     background-color: black;
   }
 
-  .no-btn-big-danger:after
+  .no-btn.big-danger:active >>> *
+  {
+    color: black;
+  }
+
+  .no-btn.big-danger:after
   {
     content: '💀';
   }
