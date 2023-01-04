@@ -8,11 +8,13 @@
       v-model="displayMenu"
       :items="items"
       :close-at-click="false"
+      :multiple="multiple"
       @select="test"
     >
       <no-input-text
         ref="no-input-text"
         :placeholder="placeholder"
+        icon-right="menu-down"
       >
         <slot />
       </no-input-text>
@@ -42,11 +44,26 @@
       placeholder: {
         type: String,
         default: ''
+      },
+      multiple: {
+        type: Boolean,
+        default: false
+      }
+    },
+    watch: {
+      displayMenu (value) {
+        if (value) {
+          window.addEventListener('click', this.windowClick)
+        } else {
+          window.removeEventListener('click', this.windowClick)
+        }
       }
     },
     methods: {
       windowClick (e) {
-        if (e.path.findIndex(el => el.id === ('no-input-select-' + this.autoId)) === -1) this.displayMenu = false
+        if (e.path.findIndex(el => el.id === ('no-input-select-' + this.autoId)) === -1) {
+          this.displayMenu = false
+        }
       },
       test (e) {
         console.log(e)
@@ -57,14 +74,14 @@
         return Math.floor(Math.random() * 999);
       }
     },
-    mounted () {
-      window.addEventListener('click', this.windowClick)
+    /* mounted () {
+      if (this.displayMenu) window.addEventListener('click', this.windowClick)
     },
     beforeDestroy () {
       window.removeEventListener('click', this.windowClick)
-    },
+    }, */
     data: () => ({
-      displayMenu: true
+      displayMenu: false
     })
   }
 

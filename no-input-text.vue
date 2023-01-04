@@ -11,11 +11,14 @@
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
+      <span v-if="iconRight" class="icon-right" v-html="mdiIcon(iconRight, 'rgb(70,70,70)')" />
     </span>
   </span>
 </template>
 
 <script>
+
+  import { mdiIcon } from './mdi-icon'
 
   export default {
     name: "no-input-text",
@@ -31,6 +34,10 @@
       fullWidth: {
         type: Boolean,
         default: false
+      },
+      iconRight: {
+        type: String,
+        default: null
       }
     },
     watch: {
@@ -41,12 +48,13 @@
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
-      }
+      },
     },
     created () {
       this.text = this.value
     },
     data: () => ({
+      mdiIcon,
       text: ''
     })
   }
@@ -67,12 +75,18 @@
     padding: 5px;
     background-color: rgba(var(--bleu-rgb), 0);
     border-radius: 10px;
+    position: relative;
     transition: .3s;
   }
 
   .no-input-text:not(.fullWidth) .input-text
   {
     max-width: 500px;
+  }
+
+  .no-input-text label
+  {
+    padding: 0 5px;
   }
 
   .input-text input
@@ -109,9 +123,23 @@
     opacity: .2;
   }
 
-  .no-input-text label
+  .icon-right
   {
-    padding: 0 5px;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 25px;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 100px;
+    font-size: .8em;
+    color: rgb(80,80,80);
+    box-shadow: 0 0 5px rgba(255,255,255,1);
   }
 
 </style>

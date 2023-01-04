@@ -1,7 +1,7 @@
 <template>
-  <span class="no-lib all-no-input-checkbox" @click="select">
+  <span class="no-lib no-input-checkbox" @click="select">
     <span class="container-no-input-checkbox">
-      <span class="no-input-checkbox" :class="{ unselected: !value_input }">
+      <span class="checkbox-case" :class="{ unselected: !value_input }">
         <transition name="fast-fade">
           <span v-if="value_input">👍</span>
         </transition>
@@ -51,7 +51,7 @@
 
 <style scoped>
 
-  .all-no-input-checkbox
+  .no-input-checkbox
   {
     display: flex;
     align-items: center;
@@ -72,12 +72,12 @@
     transition: .3s;
   }
 
-  .all-no-input-checkbox:hover .container-no-input-checkbox
+  .no-input-checkbox:hover .container-no-input-checkbox
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
 
-  .no-input-checkbox
+  .checkbox-case
   {
     box-shadow: 0 0 5px var(--bleu);
     border-radius: 7px;
@@ -91,18 +91,18 @@
     transition: .3s;
   }
 
-  .no-input-checkbox:active
+  .checkbox-case:active
   {
     background-color: var(--bleu-2);
   }
 
-  .no-input-checkbox.unselected
+  .checkbox-case.unselected
   {
     box-shadow: 0 0 2px rgba(0,0,0,.7);
     background-color: white;
   }
 
-  .no-input-checkbox.unselected:active
+  .checkbox-case.unselected:active
   {
     background-color: rgb(220,220,220);
   }
