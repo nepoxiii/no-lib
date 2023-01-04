@@ -1,45 +1,57 @@
 <template>
-  <span class="all-hero-checkbox" @click="select">
-    <span class="container-hero-checkbox">
-      <span class="hero-checkbox" :class="{ unselected: !value }">
+  <span class="all-no-input-checkbox" @click="select">
+    <span class="container-no-input-checkbox">
+      <span class="no-input-checkbox" :class="{ unselected: !value_input }">
         <transition name="fast-fade">
-          <span v-if="value">👍</span>
+          <span v-if="value_input">👍</span>
         </transition>
       </span>
     </span>
     <span v-if="isSlot">
       <slot />
     </span>
+    <input v-show="false" type="checkbox" v-model="value_input" />
   </span>
 </template>
 
 <script>
 
+  import noStyle from './no-style.css'
+  import { useCssVars } from 'vue'
+  useCssVars(noStyle)
+
   export default {
-    name: "hero-checkbox",
+    name: "no-input-checkbox",
     props: {
       value: {
         type: Boolean,
-        default: false
+        default: true
       }
     },
     methods: {
       select () {
-        this.$emit('input', !this.value)
+        this.value_input = !this.value_input
+        this.$emit('input', this.value_input)
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
       }
-    }
+    },
+    mounted () {
+      this.value_input = this.value
+    },
+    data: () => ({
+      value_input: false
+    })
   }
 
 </script>
 
 <style scoped>
 
-  .all-hero-checkbox
+  .all-no-input-checkbox
   {
     display: flex;
     align-items: center;
@@ -49,7 +61,7 @@
     width: fit-content;
   }
 
-  .container-hero-checkbox
+  .container-no-input-checkbox
   {
     padding: 5px;
     display: flex;
@@ -60,12 +72,12 @@
     transition: .3s;
   }
 
-  .all-hero-checkbox:hover .container-hero-checkbox
+  .all-no-input-checkbox:hover .container-no-input-checkbox
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
 
-  .hero-checkbox
+  .no-input-checkbox
   {
     box-shadow: 0 0 5px var(--bleu);
     border-radius: 7px;
@@ -79,18 +91,18 @@
     transition: .3s;
   }
 
-  .hero-checkbox:active
+  .no-input-checkbox:active
   {
     background-color: var(--bleu-2);
   }
 
-  .hero-checkbox.unselected
+  .no-input-checkbox.unselected
   {
     box-shadow: 0 0 2px rgba(0,0,0,.7);
     background-color: white;
   }
 
-  .hero-checkbox.unselected:active
+  .no-input-checkbox.unselected:active
   {
     background-color: rgb(220,220,220);
   }

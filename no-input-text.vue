@@ -1,9 +1,9 @@
 <template>
-  <span class="hero-text-field" :class="{ fullWidth }">
+  <span class="no-input-text" :class="{ fullWidth }">
     <span v-if="isSlot">
       <slot />
     </span>
-    <span class="text-field">
+    <span class="input-text">
       <input
         v-model="text"
         type="text"
@@ -16,7 +16,7 @@
 <script>
 
   export default {
-    name: "hero-checkbox",
+    name: "no-input-text",
     props: {
       value: {
         type: String,
@@ -53,14 +53,14 @@
 
 <style scoped>
 
-  .hero-text-field
+  .no-input-text
   {
     display: flex;
     flex-direction: column;
     column-gap: 10px;
   }
 
-  .text-field
+  .input-text
   {
     padding: 5px;
     background-color: rgba(var(--bleu-rgb), 0);
@@ -68,12 +68,12 @@
     transition: .3s;
   }
 
-  .hero-text-field:not(.fullWidth) .text-field
+  .no-input-text:not(.fullWidth) .input-text
   {
     max-width: 500px;
   }
 
-  .text-field input
+  .input-text input
   {
     padding: 5px 12px;
     border-radius: 7px;
@@ -84,24 +84,24 @@
     transition: .3s;
   }
 
-  .text-field input:focus
+  .input-text input:focus
   {
     box-shadow: 0 0 5px var(--bleu);
     border-color: var(--bleu);
   }
 
-  .text-field:hover,
-  .text-field:has(input:focus)
+  .input-text:hover,
+  .input-text:has(input:focus)
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
 
-  .text-field input::placeholder
+  .input-text input::placeholder
   {
     transition: .2s;
   }
 
-  .text-field input:focus::placeholder
+  .input-text input:focus::placeholder
   {
     opacity: .3;
   }
