@@ -1,5 +1,5 @@
 <template>
-  <button class="no-btn">
+  <button class="no-lib no-btn">
     <slot />
   </button>
 </template>
@@ -21,12 +21,21 @@
 
   .no-btn
   {
-    border: none;
+    --background-color: var(--bleu);
+    --active-background-color: var(--bleu-2);
+    --color: white;
+    --emoji: '✋';
+
     width: fit-content;
     height: fit-content;
-    background-color: var(--bleu);
-    border-radius: 4px;
-    padding: 5px 20px;
+    background-color: var(--background-color);
+    border-radius: 3px;
+    padding: 5px 15px;
+    border: none;
+    /*
+     * border: 1px solid var(--background-color)
+     */
+    box-shadow: 0 0 3px var(--background-color);
     cursor: pointer;
     position: relative;
     user-select: none;
@@ -37,13 +46,15 @@
 
   .no-btn >>> *
   {
-    color: white;
+    color: var(--color);
+    font-weight: 600;
+    font-size: .9em;
     transition: .2s;
   }
 
   .no-btn:after
   {
-    content: '✋';
+    content: var(--emoji);
     position: absolute;
     left: 0;
     right: 0;
@@ -65,17 +76,12 @@
 
   .no-btn:hover >>> *
   {
-    color: var(--bleu);
+    color: transparent;
   }
 
   .no-btn:active
   {
-    background-color: var(--bleu-2);
-  }
-
-  .no-btn:active >>> *
-  {
-    color: var(--bleu-2);
+    background-color: var(--active-background-color);
   }
 
   .no-btn:disabled
@@ -86,102 +92,70 @@
 
   .no-btn.danger
   {
-    background-color: var(--rouge);
-  }
-
-  .no-btn.danger:hover >>> *
-  {
-    color: var(--rouge);
-  }
-
-  .no-btn.danger:active
-  {
-    background-color: var(--rouge-2);
-  }
-
-  .no-btn.danger:active >>> *
-  {
-    color: var(--rouge-2);
-  }
-
-  .no-btn.danger:after
-  {
-    content: '😈';
+    --background-color: var(--rouge);
+    --active-background-color: var(--rouge-2);
+    --emoji: '😈';
   }
 
   .no-btn.green
   {
-    background-color: var(--vert);
-  }
-
-  .no-btn.green:hover >>> *
-  {
-    color: var(--vert);
-  }
-
-  .no-btn.green:active
-  {
-    background-color: var(--vert-2);
-  }
-
-  .no-btn.green:active >>> *
-  {
-    color: var(--vert-2);
-  }
-
-  .no-btn.green:after
-  {
-    content: '🚀';
-  }
-
-  .no-btn.secondary
-  {
-    background-color: white;
-  }
-
-  .no-btn.secondary >>> *
-  {
-    color: var(--bleu);
-  }
-
-  .no-btn.secondary:hover >>> *
-  {
-    color: white;
-  }
-
-  .no-btn.secondary:active
-  {
-    background-color: rgb(240,240,240);
-  }
-
-  .no-btn.secondary:active >>> *
-  {
-    color: rgb(240,240,240);
+    --background-color: var(--vert);
+    --active-background-color: var(--vert-2);
+    --emoji: '🚀';
   }
 
   .no-btn.big-danger
   {
-    background-color: rgb(70,70,70);
+    --background-color: rgb(70,70,70);
+    --active-background-color: black;
+    --emoji: '💀';
   }
 
-  .no-btn.big-danger:hover >>> *
+  .no-btn.secondary
   {
-    color: rgb(70,70,70);
+    background-color: transparent;
+    --color: var(--background-color);
   }
 
-  .no-btn.big-danger:active
+  .no-btn.tertiary
   {
-    background-color: black;
+    background-color: transparent;
+    --color: var(--background-color);
+    box-shadow: none;
+    border: none;
+    /*
+     * border-color: transparent;
+     */
   }
 
-  .no-btn.big-danger:active >>> *
+  .no-btn.white
   {
-    color: black;
+    background-color: white;
+    --color: var(--background-color);
   }
 
-  .no-btn.big-danger:after
+  .no-btn.white.tertiary
   {
-    content: '💀';
+    /*
+     * border-color: white;
+     */
+    box-shadow: 0 0 3px white;
+  }
+
+  .no-btn.flat
+  {
+    box-shadow: none;
+    border: 1px solid var(--background-color);
+  }
+
+  .no-btn.flat.tertiary
+  {
+    border-color: transparent;
+  }
+
+  .no-btn.flat.tertiary.white
+  {
+    border-color: white;
   }
 
 </style>

@@ -1,8 +1,6 @@
 
-:root
+.no-lib
 {
-  --bg-global: rgb(253,253,253);
-  --bg-global-rgb: 253,253,253;
   --rouge: #FF5353;
   --rouge-2: #e53030;
   --light-rouge: #FFCCCC;
@@ -15,21 +13,14 @@
   --light-bleu: #C7DEF4;
   --or: #FFC875;
   --orange: #ffb33c;
-  --font-color: black;
 }
 
-::selection
-{
-  color: white;
-  background-color: var(--bleu-3);
-}
-
-.black_mode
+/* .black_mode
 {
   --font-color: rgb(250,250,250);
   --bg-global: rgb(30,30,30);
   --bg-global-rgb: 30,30,30;
-}
+} */
 
 .pill
 {
@@ -53,11 +44,11 @@
   color: #628C64;
 }
 
-.black_mode .pill.green-pill
+/* .black_mode .pill.green-pill
 {
   color: black;
   background-color: #78FE7D;
-}
+} */
 
 .pill.orange-pill
 {
@@ -65,11 +56,11 @@
   color: #d79a55;
 }
 
-.black_mode .pill.orange-pill
+/* .black_mode .pill.orange-pill
 {
   color: black;
   background-color: #FFCC4C;
-}
+} */
 
 .pill.blue-pill
 {

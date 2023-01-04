@@ -1,5 +1,5 @@
 <template>
-  <span class="all-no-input-checkbox" @click="select">
+  <span class="no-lib all-no-input-checkbox" @click="select">
     <span class="container-no-input-checkbox">
       <span class="no-input-checkbox" :class="{ unselected: !value_input }">
         <transition name="fast-fade">
@@ -25,7 +25,7 @@
     props: {
       value: {
         type: Boolean,
-        default: true
+        default: false
       }
     },
     methods: {

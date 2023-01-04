@@ -1,15 +1,14 @@
 <template>
-  <span class="no-lib no-input-text" :class="{ fullWidth }">
+  <span class="no-lib no-input-textarea">
     <label v-if="isSlot">
       <slot />
     </label>
-    <span class="input-text">
-      <input
+    <span class="input-textarea">
+      <textarea
         v-model="text"
-        type="text"
         :placeholder="placeholder"
-        @focus="e => $emit('focus', e)"
-        @focusout="e => $emit('focusout', e)"
+        :rows="rows"
+        :cols="cols"
       />
     </span>
   </span>
@@ -18,7 +17,7 @@
 <script>
 
   export default {
-    name: "no-input-text",
+    name: "no-input-textarea",
     props: {
       value: {
         type: String,
@@ -28,9 +27,13 @@
         type: String,
         default: ''
       },
-      fullWidth: {
-        type: Boolean,
-        default: false
+      rows: {
+        type: [String, Number],
+        default: 5
+      },
+      cols: {
+        type: [String, Number],
+        default: 50
       }
     },
     watch: {
@@ -55,27 +58,27 @@
 
 <style scoped>
 
-  .no-input-text
+  .no-input-textarea
   {
     display: flex;
     flex-direction: column;
     column-gap: 10px;
+    width: 100%;
   }
 
-  .input-text
+  .input-textarea
   {
-    padding: 5px;
+    /*
+     * 'hit-box' bug
+     * padding-bottom: 0;
+     */
+    padding: 5px 5px 0;
     background-color: rgba(var(--bleu-rgb), 0);
     border-radius: 10px;
     transition: .3s;
   }
 
-  .no-input-text:not(.fullWidth) .input-text
-  {
-    max-width: 500px;
-  }
-
-  .input-text input
+  .input-textarea textarea
   {
     padding: 5px 12px;
     border-radius: 7px;
@@ -83,33 +86,33 @@
     box-shadow: 0 0 2px rgba(0,0,0,.7);
     border: 1px solid white;
     width: 100%;
-    transition: .3s;
+    transition: all .3s, width 0s, height 0s;
   }
 
-  .input-text input:focus
+  .input-textarea textarea:focus
   {
     box-shadow: 0 0 5px var(--bleu);
     border-color: var(--bleu);
   }
 
-  .input-text:hover,
-  .input-text:has(input:focus)
+  .input-textarea:hover,
+  .input-textarea:has(textarea:focus)
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
 
-  .input-text input::placeholder
+  .input-textarea textarea::placeholder
   {
     color: rgb(210,210,210);
     transition: .2s;
   }
 
-  .input-text input:focus::placeholder
+  .input-textarea textarea:focus::placeholder
   {
     opacity: .2;
   }
 
-  .no-input-text label
+  .no-input-textarea label
   {
     padding: 0 5px;
   }
