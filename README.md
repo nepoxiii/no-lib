@@ -1,9 +1,14 @@
 # no-lib
-library
+vue.js components library
 
-## add to your project
-`git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put`
+## Add to your project
+Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put`.  
+Use like classic component you know.
 
-## to change the colors
-- add `.gitignore` in the no-lib folder with `no-style.css` path inside
-- change no-style.css
+## Change the colors
+- Add `.gitignore` in the no-lib folder with `no-style.css` path inside
+- Change no-style.css
+
+🧙🧚‍♀️
+
+[![](https://src.nepo.fr/illustration-0.jpg)](https://www.instagram.com/nepo_website)
