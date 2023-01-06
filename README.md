@@ -2,7 +2,7 @@
 vue.js components library
 
 ## Add to your project
-- Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put`.  
+- Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put/no-lib`.  
 - Add `no-style.css` path in your `nuxt.config.js`.  
 Use like classic component you know.
 
