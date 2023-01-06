@@ -7,7 +7,28 @@ vue.js components library
 Use like classic component you know.
 
 ## Change the colors
-You can overwrite css and specially the variables use in `no-style.css` by create a new .css sheet. Exemple : `var(--bleu): #MYBLUE`. Your file need to be placed above `no-style.css` in your `nuxt.config.js`.
+You can overwrite css and specially the variables use in `no-style.css` by create a new .css sheet.
+Don't forget to put your style inside `.no-lib` class. Your file need to be placed below `no-style.css` in your `nuxt.config.js`.
+
+Exemples of `your-style.css` :
+```css
+/*
+ * change --bleu value
+ */
+
+.lib {
+  var(--bleu): #MYBLUE;
+}
+```
+```css
+/*
+ * change --bleu with your variable
+ */
+
+.lib {
+  var(--bleu): --myblue;
+}
+```
 
 🧙🧚‍♀️
 

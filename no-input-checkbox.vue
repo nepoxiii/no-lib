@@ -16,9 +16,9 @@
 
 <script>
 
-  import noStyle from './no-style.css'
+  /* import noStyle from './no-style.css'
   import { useCssVars } from 'vue'
-  useCssVars(noStyle)
+  useCssVars(noStyle) */
 
   export default {
     name: "no-input-checkbox",
