@@ -2,12 +2,12 @@
 vue.js components library
 
 ## Add to your project
-Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put`.  
+- Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put`.  
+- Add `no-style.css` path in your `nuxt.config.js`.  
 Use like classic component you know.
 
 ## Change the colors
-- Add `.gitignore` in the no-lib folder with `no-style.css` path inside
-- Change no-style.css
+You can overwrite css and specially the variables use in `no-style.css` by create a new .css sheet. Exemple : `var(--bleu): #MYBLUE`. Your file need to be placed above `no-style.css` in your `nuxt.config.js`.
 
 🧙🧚‍♀️
 
