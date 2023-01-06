@@ -44,11 +44,18 @@
     transition: .2s;
   }
 
+  .no-btn
+  {
+    /*
+     * font-size: .9em;
+     */
+    font-weight: 500;
+  }
+
+  .no-btn,
   .no-btn >>> *
   {
     color: var(--color);
-    font-weight: 600;
-    font-size: .9em;
     transition: .2s;
   }
 
