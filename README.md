@@ -16,7 +16,7 @@ Exemples of `your-style.css` :
  * change --bleu value
  */
 
-.lib {
+.no-lib {
   var(--bleu): #MYBLUE;
 }
 ```
@@ -25,7 +25,7 @@ Exemples of `your-style.css` :
  * change --bleu with your variable
  */
 
-.lib {
+.no-lib {
   var(--bleu): --myblue;
 }
 ```
