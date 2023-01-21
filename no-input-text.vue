@@ -1,5 +1,9 @@
 <template>
-  <span class="no-lib no-input-text" :class="{ fullWidth }">
+  <span
+    class="no-lib no-input-text"
+    :class="{ fullWidth }"
+    @click="e => $emit('click', e)"
+  >
     <label v-if="isSlot">
       <slot />
     </label>
@@ -8,10 +12,15 @@
         v-model="text"
         :type="type"
         :placeholder="placeholder"
+        :disabled="disabled"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
-      <span v-if="iconRight" class="icon-right" v-html="mdiIcon(iconRight, 'rgb(70,70,70)')" />
+      <span
+        v-if="iconRight"
+        class="icon-right"
+        v-html="mdiIcon(iconRight, 'rgb(100,100,100)')"
+      />
     </span>
   </span>
 </template>
@@ -34,6 +43,10 @@
       type: {
         type: String,
         default: 'text'
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       fullWidth: {
         type: Boolean,
@@ -76,6 +89,7 @@
 
   .input-text
   {
+    display: flex;
     padding: 5px;
     background-color: rgba(var(--bleu-rgb), 0);
     border-radius: 10px;
@@ -139,11 +153,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border-radius: 100px;
-    font-size: .8em;
-    color: rgb(80,80,80);
-    box-shadow: 0 0 5px rgba(255,255,255,1);
+  }
+
+  .input-text:has(.icon-right) input
+  {
+    padding-right: 30px;
   }
 
 </style>

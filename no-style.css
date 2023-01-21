@@ -28,9 +28,10 @@
   border-radius: 5px;
   background-color: rgb(242,242,242);
   color: black;
-  display: flex;
+  /* display: flex;
   column-gap: 5px;
-  width: fit-content;
+  width: fit-content; */
+  display: inline;
 }
 
 .pill:not(.normal-size)
@@ -78,5 +79,39 @@
 {
   background-color: rgb(150,150,150);
   color: white;
+}
+
+/*
+ * fade-zoom
+ */
+
+.no-fade-zoom-enter-active
+{
+  animation: no-fade-zoom-in .2s;
+}
+.no-fade-zoom-leave-active
+{
+  animation: no-fade-zoom-out .2s;
+}
+
+@keyframes no-fade-zoom-in{
+  0%{
+    opacity: 0;
+    transform: scale(.5) translateY(-50px);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes no-fade-zoom-out{
+  0%{
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100%{
+    opacity: 0;
+    transform: scale(.5) translateY(-50px);
+  }
 }
 

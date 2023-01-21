@@ -1,7 +1,7 @@
 <template>
   <div class="no-lib no-menu">
     <slot />
-    <transition name="fade">
+    <transition name="no-fade-zoom">
       <div v-if="value" class="menu-window">
         <span
           v-for="(item, index) in items"
@@ -61,7 +61,6 @@
     },
     mounted () {
       this.display = this.value
-      console.log('hi')
     },
     data: () => ({
       display: false

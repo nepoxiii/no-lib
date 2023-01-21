@@ -1,8 +1,8 @@
 <template>
   <div
-    :id="'no-input-select-' + autoId"
+    :id="'no-input-text-' + autoId"
     class="no-lib"
-    @click="displayMenu = true"
+    @click="componentClick"
   >
     <no-menu
       v-model="displayMenu"
@@ -12,9 +12,9 @@
       @select="test"
     >
       <no-input-text
-        ref="no-input-text"
         :placeholder="placeholder"
-        icon-right="menu-down"
+        :disabled="true"
+        :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
       >
         <slot />
       </no-input-text>
@@ -48,6 +48,10 @@
       multiple: {
         type: Boolean,
         default: false
+      },
+      textEntry: {
+        type: Boolean,
+        default: false
       }
     },
     watch: {
@@ -62,8 +66,18 @@
     methods: {
       windowClick (e) {
         const get_path = e.path || e.composedPath() || []
-        if (get_path.findIndex(el => el.id === ('no-input-select-' + this.autoId)) === -1) {
+        if (get_path.findIndex(el => el.id === ('no-input-text-' + this.autoId)) === -1) {
           this.displayMenu = false
+        }
+      },
+      componentClick (e) {
+        const get_path = e.path || e.composedPath() || []
+        if (this.displayMenu) {
+          if (get_path.findIndex(el => el.className === 'menu-window') === -1) {
+            this.displayMenu = false
+          }
+        } else {
+          this.displayMenu = true
         }
       },
       test (e) {
@@ -89,5 +103,11 @@
 </script>
 
 <style scoped>
+
+  .no-input-text,
+  .no-input-text >>> *
+  {
+    cursor: pointer;
+  }
 
 </style>
