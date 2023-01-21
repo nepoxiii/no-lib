@@ -6,7 +6,7 @@
     <span class="input-text">
       <input
         v-model="text"
-        type="text"
+        :type="type"
         :placeholder="placeholder"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
@@ -30,6 +30,10 @@
       placeholder: {
         type: String,
         default: ''
+      },
+      type: {
+        type: String,
+        default: 'text'
       },
       fullWidth: {
         type: Boolean,
