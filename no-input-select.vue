@@ -61,7 +61,8 @@
     },
     methods: {
       windowClick (e) {
-        if (e.path.findIndex(el => el.id === ('no-input-select-' + this.autoId)) === -1) {
+        const get_path = e.path || e.composedPath() || []
+        if (get_path.findIndex(el => el.id === ('no-input-select-' + this.autoId)) === -1) {
           this.displayMenu = false
         }
       },
