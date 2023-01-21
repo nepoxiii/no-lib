@@ -9,6 +9,7 @@
         :placeholder="placeholder"
         :rows="rows"
         :cols="cols"
+        @input="e => $emit('input', e)"
       />
     </span>
   </span>
@@ -36,11 +37,11 @@
         default: 50
       }
     },
-    watch: {
+    /* watch: {
       text (value) {
         this.$emit('input', value)
       }
-    },
+    }, */
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
