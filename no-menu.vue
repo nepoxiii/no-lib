@@ -124,6 +124,11 @@
     background-color: rgba(var(--bleu-rgb), .3);
   }
 
+  .menu-window > *.clickable:not(:has(.no-input-checkbox)):active
+  {
+    background-color: rgba(var(--bleu-rgb), .5);
+  }
+
   .menu-window .no-input-checkbox
   {
     width: 100%;

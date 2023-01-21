@@ -118,14 +118,16 @@
     transition: .3s;
   }
 
-  .input-text input:focus
+  .input-text input:focus,
+  .no-input-select-open .input-text input
   {
     box-shadow: 0 0 5px var(--bleu);
     border-color: var(--bleu);
   }
 
   .input-text:hover,
-  .input-text:has(input:focus)
+  .input-text:has(input:focus),
+  .no-input-select-open .input-text
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }

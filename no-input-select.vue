@@ -1,7 +1,8 @@
 <template>
   <div
     :id="'no-input-text-' + autoId"
-    class="no-lib"
+    class="no-lib no-input-select"
+    :class="{ 'no-input-select-open': displayMenu }"
     @click="componentClick"
   >
     <no-menu
