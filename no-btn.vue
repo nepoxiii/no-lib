@@ -21,6 +21,9 @@
         return !!this.$slots?.default?.length
       }
     },
+    mounted () {
+      console.log('coup dur')
+    }
   }
 
 </script>
