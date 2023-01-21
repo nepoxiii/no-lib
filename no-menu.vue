@@ -61,6 +61,7 @@
     },
     mounted () {
       this.display = this.value
+      console.log('hi')
     },
     data: () => ({
       display: false
