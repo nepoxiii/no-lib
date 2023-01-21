@@ -61,6 +61,7 @@
     },
     mounted () {
       this.display = this.value
+      console.log("théo + mathéo = amour")
     },
     data: () => ({
       display: false
