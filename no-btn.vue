@@ -1,5 +1,5 @@
 <template>
-  <button class="no-lib no-btn">
+  <button class="no-lib no-btn" :type="type">
     <span>
       <slot />
     </span>
@@ -10,6 +10,12 @@
 
   export default {
     name: "no-btn",
+    props: {
+      type: {
+        type: String,
+        default: null
+      }
+    },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
