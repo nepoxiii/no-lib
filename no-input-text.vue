@@ -2,17 +2,18 @@
   <span
     class="no-lib no-input-text"
     :class="{ fullWidth }"
-    @click="e => $emit('click', e)"
+    @click="componentClick"
   >
     <label v-if="isSlot">
-      <slot />
+      <slot /> {{ localValue }}
     </label>
     <span class="input-text">
       <input
-        v-model="text"
+        v-model="localValue"
         :type="type"
         :placeholder="placeholder"
         :disabled="disabled"
+        :readonly="readonly"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
@@ -48,6 +49,10 @@
         type: Boolean,
         default: false
       },
+      readonly: {
+        type: Boolean,
+        default: false
+      },
       fullWidth: {
         type: Boolean,
         default: false
@@ -58,21 +63,34 @@
       }
     },
     watch: {
-      text (value) {
-        this.$emit('input', value)
+      localValue (newValue) {
+        this.$emit('input', newValue)
+      }
+    },
+    methods: {
+      componentClick (e) {
+        this.$emit('click', e)
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
       },
+      /* text: {
+        get () {
+          return this.value
+        },
+        set (value) {
+          this.$emit('input', value)
+        }
+      } */
     },
-    created () {
-      this.text = this.value
+    created() {
+      this.localValue = this.value
     },
     data: () => ({
       mdiIcon,
-      text: ''
+      localValue: ''
     })
   }
 
@@ -119,7 +137,7 @@
   }
 
   .input-text input:focus,
-  .no-input-select-open .input-text input
+  .no-menu-open .input-text input
   {
     box-shadow: 0 0 5px var(--bleu);
     border-color: var(--bleu);
@@ -127,7 +145,7 @@
 
   .input-text:hover,
   .input-text:has(input:focus),
-  .no-input-select-open .input-text
+  .no-menu-open .input-text
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
@@ -138,7 +156,7 @@
     transition: .2s;
   }
 
-  .input-text input:focus::placeholder
+  .input-text input:not(:read-only):focus::placeholder
   {
     opacity: .2;
   }

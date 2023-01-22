@@ -1,24 +1,20 @@
 <template>
-  <span class="no-lib no-input-checkbox" @click="select">
+  <label class="no-lib no-input-checkbox">
     <span class="container-no-input-checkbox">
-      <span class="checkbox-case" :class="{ unselected: !value_input }">
+      <span class="checkbox-case" :class="{ unselected: !model }">
         <transition name="fast-fade">
-          <span v-if="value_input">👍</span>
+          <span v-if="model">👍</span>
         </transition>
       </span>
     </span>
     <span v-if="isSlot">
       <slot />
     </span>
-    <input v-show="false" type="checkbox" v-model="value_input" />
-  </span>
+    <input v-show="false" type="checkbox" v-model="model" />
+  </label>
 </template>
 
 <script>
-
-  /* import noStyle from './no-style.css'
-  import { useCssVars } from 'vue'
-  useCssVars(noStyle) */
 
   export default {
     name: "no-input-checkbox",
@@ -28,22 +24,26 @@
         default: false
       }
     },
-    methods: {
-      select () {
-        this.value_input = !this.value_input
-        this.$emit('input', this.value_input)
+    watch: {
+      model (value) {
+        this.value_input = value
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
+      },
+      value_input: {
+        get () {
+          return this.value
+        },
+        set (value) {
+          this.$emit('input', value)
+        }
       }
     },
-    mounted () {
-      this.value_input = this.value
-    },
     data: () => ({
-      value_input: false
+      model: false
     })
   }
 

@@ -36,22 +36,19 @@
         default: 50
       }
     },
-    watch: {
-      text (value) {
-        this.$emit('input', value)
-      }
-    },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
+      },
+      text: {
+        get () {
+          return this.value
+        },
+        set (value) {
+          this.$emit('input', value)
+        }
       }
-    },
-    created () {
-      this.text = this.value
-    },
-    data: () => ({
-      text: ''
-    })
+    }
   }
 
 </script>

@@ -1,18 +1,18 @@
 <template>
   <div
-    :class="{ 'no-menu-open': value }"
+    :class="{ 'no-menu-open': display }"
     class="no-lib no-menu"
   >
     <div @click="componentClick">
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-if="value" class="menu-window">
+      <div v-if="display" class="menu-window">
         <span
           v-for="(item, index) in items"
           :key="'item-' + index"
           :class="{ clickable: typeof item === 'object' ? item.value : false }"
-          @click="itemClick(item)"
+          @click="itemClick(item, index)"
         >
           <no-input-checkbox v-if="multiple && typeof item === 'object' && item.value !== undefined">
             {{ typeof item === 'string' ? item : item.name }}
@@ -60,15 +60,12 @@
         } else {
           window.removeEventListener('click', this.windowClick)
         }
-      },
-      display (value) {
-        this.$emit('input', value)
       }
     },
     methods: {
-      itemClick (item) {
+      itemClick (item, index) {
         if (typeof item === 'string' || item.value !== undefined) {
-          this.$emit('select', item)
+          this.$emit('select', item, index)
         }
         if (this.closeAtClick) {
           this.display = false
@@ -76,31 +73,32 @@
       },
       windowClick (e) {
         const get_path = e.path || e.composedPath() || []
-        get_path.forEach(el => console.log((el.className || '').split(' ')))
-        if (get_path.findIndex(el => (el.className || '').split(' ').includes('no-menu')) === -1) {
+        if (get_path.findIndex(el => typeof el.className === 'string' && el.className.split(' ').includes('no-menu')) === -1) {
           this.display = false
         }
       },
-      componentClick (e) {
-        // console.log(e)
-        const get_path = e.path || e.composedPath() || []
-        if (this.display) {
-          if (get_path.findIndex(el => el.className === 'menu-window') === -1) {
-            this.display = false
-          }
-        } else {
-          this.display = true
-        }
+      componentClick () {
+        this.display = !this.display
       },
     },
-    mounted () {
-      this.display = this.value
+    computed: {
+      display: {
+        get () {
+          return this.value
+        },
+        set (value) {
+          this.$emit('input', value)
+        }
+      }
+    },
+    mounted() {
+      if (this.value) window.addEventListener('click', this.windowClick)
     },
     beforeDestroy () {
       if (this.value) window.removeEventListener('click', this.windowClick)
     },
     data: () => ({
-      display: false,
+      selected: []
       // autoId: Math.floor(Math.random() * 999)
     })
   }

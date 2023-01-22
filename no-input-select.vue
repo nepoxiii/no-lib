@@ -5,11 +5,12 @@
       :items="items"
       :close-at-click="false"
       :multiple="multiple"
-      @select="test"
+      @select="select"
     >
       <no-input-text
+        v-model="textDisplay"
         :placeholder="placeholder"
-        :disabled="true"
+        :readonly="true"
         :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
       >
         <slot />
@@ -31,11 +32,16 @@
     },
     props: {
       value: {
+        type: [String, Number],
         default: null
       },
       items: {
         type: Array,
         default: () => []
+      },
+      returnType: {
+        type: String,
+        default: 'value' // index / object / value
       },
       placeholder: {
         type: String,
@@ -48,15 +54,50 @@
       textEntry: {
         type: Boolean,
         default: false
+      },
+      clearable: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
-      test (e) {
-        console.log(e)
+      select (item, index) {
+        console.log(item, index)
+        this.returnValue = { item, index }
+      }
+    },
+    computed: {
+      returnValue: {
+        get () {
+          return this.value
+        },
+        set ({ item, index }) {
+          switch (this.returnType) {
+            case 'value':
+              this.$emit('input', typeof item === 'object' ? item.value : item)
+              break
+            case 'index':
+              this.$emit(index)
+              break
+            case 'object':
+            default:
+              this.$emit(item)
+              break
+          }
+          this.textDisplay = item === null
+            ? ''
+            : this.textDisplay = typeof item === 'object'
+              ? item.name !== undefined
+                ? item.name
+                : item.value
+              : item
+        }
       }
     },
     data: () => ({
-      displayMenu: false
+      displayMenu: false,
+      textDisplay: ''
+      // returnValueMultiple: []
     })
   }
 
