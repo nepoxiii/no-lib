@@ -1,10 +1,5 @@
 <template>
-  <div
-    :id="'no-input-text-' + autoId"
-    class="no-lib no-input-select"
-    :class="{ 'no-input-select-open': displayMenu }"
-    @click="componentClick"
-  >
+  <div class="no-lib no-input-select">
     <no-menu
       v-model="displayMenu"
       :items="items"
@@ -55,47 +50,11 @@
         default: false
       }
     },
-    watch: {
-      displayMenu (value) {
-        if (value) {
-          window.addEventListener('click', this.windowClick)
-        } else {
-          window.removeEventListener('click', this.windowClick)
-        }
-      }
-    },
     methods: {
-      windowClick (e) {
-        const get_path = e.path || e.composedPath() || []
-        if (get_path.findIndex(el => el.id === ('no-input-text-' + this.autoId)) === -1) {
-          this.displayMenu = false
-        }
-      },
-      componentClick (e) {
-        const get_path = e.path || e.composedPath() || []
-        if (this.displayMenu) {
-          if (get_path.findIndex(el => el.className === 'menu-window') === -1) {
-            this.displayMenu = false
-          }
-        } else {
-          this.displayMenu = true
-        }
-      },
       test (e) {
         console.log(e)
       }
     },
-    computed: {
-      autoId () {
-        return Math.floor(Math.random() * 999);
-      }
-    },
-    /* mounted () {
-      if (this.displayMenu) window.addEventListener('click', this.windowClick)
-    },
-    beforeDestroy () {
-      window.removeEventListener('click', this.windowClick)
-    }, */
     data: () => ({
       displayMenu: false
     })

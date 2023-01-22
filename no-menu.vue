@@ -1,6 +1,11 @@
 <template>
-  <div class="no-lib no-menu">
-    <slot />
+  <div
+    :class="{ 'no-menu-open': value }"
+    class="no-lib no-menu"
+  >
+    <div @click="componentClick">
+      <slot />
+    </div>
     <transition name="no-fade-zoom">
       <div v-if="value" class="menu-window">
         <span
@@ -48,6 +53,18 @@
         default: false
       }
     },
+    watch: {
+      value (value) {
+        if (value) {
+          window.addEventListener('click', this.windowClick)
+        } else {
+          window.removeEventListener('click', this.windowClick)
+        }
+      },
+      display (value) {
+        this.$emit('input', value)
+      }
+    },
     methods: {
       itemClick (item) {
         if (typeof item === 'string' || item.value !== undefined) {
@@ -55,15 +72,36 @@
         }
         if (this.closeAtClick) {
           this.display = false
-          this.$emit('input', this.display)
         }
-      }
+      },
+      windowClick (e) {
+        const get_path = e.path || e.composedPath() || []
+        get_path.forEach(el => console.log((el.className || '').split(' ')))
+        if (get_path.findIndex(el => (el.className || '').split(' ').includes('no-menu')) === -1) {
+          this.display = false
+        }
+      },
+      componentClick (e) {
+        // console.log(e)
+        const get_path = e.path || e.composedPath() || []
+        if (this.display) {
+          if (get_path.findIndex(el => el.className === 'menu-window') === -1) {
+            this.display = false
+          }
+        } else {
+          this.display = true
+        }
+      },
     },
     mounted () {
       this.display = this.value
     },
+    beforeDestroy () {
+      if (this.value) window.removeEventListener('click', this.windowClick)
+    },
     data: () => ({
-      display: false
+      display: false,
+      // autoId: Math.floor(Math.random() * 999)
     })
   }
 
