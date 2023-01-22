@@ -28,7 +28,7 @@
 
 <script>
 
-  import NoInputCheckbox from './no-input-checkbox.vue'
+  import NoInputCheckbox from './form/no-input-checkbox.vue'
 
   export default {
     name: "no-menu",

@@ -5,7 +5,7 @@
     @click="componentClick"
   >
     <label v-if="isSlot">
-      <slot /> {{ localValue }}
+      <slot />
     </label>
     <span class="input-text">
       <input
@@ -28,10 +28,12 @@
 
 <script>
 
-  import { mdiIcon } from './mdi-icon'
+  import { mdiIcon } from '../../lib/mdi-icon'
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-text",
+    mixins: [modelInput],
     props: {
       value: {
         type: String,
@@ -62,11 +64,6 @@
         default: null
       }
     },
-    watch: {
-      localValue (newValue) {
-        this.$emit('input', newValue)
-      }
-    },
     methods: {
       componentClick (e) {
         this.$emit('click', e)
@@ -76,21 +73,9 @@
       isSlot () {
         return !!this.$slots?.default?.length
       },
-      /* text: {
-        get () {
-          return this.value
-        },
-        set (value) {
-          this.$emit('input', value)
-        }
-      } */
-    },
-    created() {
-      this.localValue = this.value
     },
     data: () => ({
-      mdiIcon,
-      localValue: ''
+      mdiIcon
     })
   }
 

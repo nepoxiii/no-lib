@@ -22,10 +22,12 @@
 <script>
 
   import NoInputText from './no-input-text.vue'
-  import NoMenu from './no-menu.vue'
+  import NoMenu from '../no-menu.vue'
+  // import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-select",
+    // mixins: [modelInput],
     components: {
       NoMenu,
       NoInputText
@@ -55,48 +57,44 @@
         type: Boolean,
         default: false
       },
-      clearable: {
+      /* clearable: {
         type: Boolean,
         default: false
+      } */
+    },
+    watch: {
+      localValue ({ item, index }) {
+        switch (this.returnType) {
+          case 'value':
+            this.$emit('input', typeof item === 'object' ? item.value : item)
+            break
+          case 'index':
+            this.$emit(index)
+            break
+          case 'object':
+          default:
+            this.$emit(item)
+            break
+        }
+        this.textDisplay = item === null
+          ? ''
+          : this.textDisplay = typeof item === 'object'
+            ? item.name !== undefined
+              ? item.name
+              : item.value
+            : item
       }
     },
     methods: {
       select (item, index) {
         console.log(item, index)
-        this.returnValue = { item, index }
-      }
-    },
-    computed: {
-      returnValue: {
-        get () {
-          return this.value
-        },
-        set ({ item, index }) {
-          switch (this.returnType) {
-            case 'value':
-              this.$emit('input', typeof item === 'object' ? item.value : item)
-              break
-            case 'index':
-              this.$emit(index)
-              break
-            case 'object':
-            default:
-              this.$emit(item)
-              break
-          }
-          this.textDisplay = item === null
-            ? ''
-            : this.textDisplay = typeof item === 'object'
-              ? item.name !== undefined
-                ? item.name
-                : item.value
-              : item
-        }
+        this.localValue = { item, index }
       }
     },
     data: () => ({
       displayMenu: false,
-      textDisplay: ''
+      textDisplay: '',
+      localValue: null
       // returnValueMultiple: []
     })
   }

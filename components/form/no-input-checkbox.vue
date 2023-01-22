@@ -1,50 +1,37 @@
 <template>
   <label class="no-lib no-input-checkbox">
     <span class="container-no-input-checkbox">
-      <span class="checkbox-case" :class="{ unselected: !model }">
+      <span class="checkbox-case" :class="{ unselected: !localValue }">
         <transition name="fast-fade">
-          <span v-if="model">👍</span>
+          <span v-if="localValue">👍</span>
         </transition>
       </span>
     </span>
     <span v-if="isSlot">
       <slot />
     </span>
-    <input v-show="false" type="checkbox" v-model="model" />
+    <input v-show="false" type="checkbox" v-model="localValue" />
   </label>
 </template>
 
 <script>
 
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
+
   export default {
     name: "no-input-checkbox",
+    mixins: [modelInput],
     props: {
       value: {
         type: Boolean,
         default: false
       }
     },
-    watch: {
-      model (value) {
-        this.value_input = value
-      }
-    },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
-      },
-      value_input: {
-        get () {
-          return this.value
-        },
-        set (value) {
-          this.$emit('input', value)
-        }
       }
-    },
-    data: () => ({
-      model: false
-    })
+    }
   }
 
 </script>
