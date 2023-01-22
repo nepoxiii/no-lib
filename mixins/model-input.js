@@ -3,9 +3,13 @@ export const modelInput = {
   watch: {
     localValue (newValue) {
       this.$emit('input', newValue)
+    },
+    value (value) {
+      this.localValue = value
     }
   },
   created () {
+    console.log(this.value)
     this.localValue = this.value
   },
   data: () => ({

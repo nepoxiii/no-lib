@@ -5,7 +5,7 @@
     </label>
     <span class="input-textarea">
       <textarea
-        v-model="text"
+        v-model="localValue"
         :placeholder="placeholder"
         :rows="rows"
         :cols="cols"
@@ -16,8 +16,11 @@
 
 <script>
 
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
+
   export default {
     name: "no-input-textarea",
+    mixins: [modelInput],
     props: {
       value: {
         type: String,
@@ -39,14 +42,6 @@
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
-      },
-      text: {
-        get () {
-          return this.value
-        },
-        set (value) {
-          this.$emit('input', value)
-        }
       }
     }
   }

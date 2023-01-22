@@ -1,24 +1,24 @@
 <template>
   <div
-    :class="{ 'no-menu-open': display }"
+    :class="{ 'no-menu-open': localValue }"
     class="no-lib no-menu"
   >
     <div @click="componentClick">
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-if="display" class="menu-window">
+      <div v-if="localValue" class="menu-window">
         <span
-          v-for="(item, index) in items"
+          v-for="(item, index) in displayItems"
           :key="'item-' + index"
-          :class="{ clickable: typeof item === 'object' ? item.value : false }"
+          :class="{ clickable: item.clickable }"
           @click="itemClick(item, index)"
         >
-          <no-input-checkbox v-if="multiple && typeof item === 'object' && item.value !== undefined">
-            {{ typeof item === 'string' ? item : item.name }}
+          <no-input-checkbox v-if="item.checkbox" v-model="selected[index]">
+            {{ item.title }}
           </no-input-checkbox>
           <template v-else>
-            {{ typeof item === 'string' ? item : item.name }}
+            {{ item.title }}
           </template>
         </span>
       </div>
@@ -29,9 +29,11 @@
 <script>
 
   import NoInputCheckbox from './form/no-input-checkbox.vue'
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-menu",
+    mixins: [modelInput],
     components: {
       NoInputCheckbox
     },
@@ -43,6 +45,14 @@
       items: {
         type: Array,
         default: () => []
+      },
+      /* selected: {
+        type: Array,
+        default: () => []
+      }, */
+      returnType: {
+        type: String,
+        default: 'value' // index / object / value
       },
       closeAtClick: {
         type: Boolean,
@@ -60,44 +70,54 @@
         } else {
           window.removeEventListener('click', this.windowClick)
         }
+      },
+      selected (value) {
+        this.$emit('select', value.reduce((res, selected, index) => {
+          if (selected) res.push(index)
+          return res
+        }, []), true)
       }
     },
     methods: {
-      itemClick (item, index) {
-        if (typeof item === 'string' || item.value !== undefined) {
-          this.$emit('select', item, index)
+      itemClick ({ client_data, checkbox }, index) {
+        if (!this.multiple && !checkbox) {
+          this.$emit('select', { data: client_data, index })
         }
         if (this.closeAtClick) {
-          this.display = false
+          this.localValue = false
         }
       },
       windowClick (e) {
         const get_path = e.path || e.composedPath() || []
         if (get_path.findIndex(el => typeof el.className === 'string' && el.className.split(' ').includes('no-menu')) === -1) {
-          this.display = false
+          this.localValue = false
         }
       },
       componentClick () {
-        this.display = !this.display
+        this.localValue = !this.localValue
       },
     },
-    computed: {
-      display: {
-        get () {
-          return this.value
-        },
-        set (value) {
-          this.$emit('input', value)
-        }
-      }
+    created () {
+      this.items.forEach(client_data => {
+        const clickable = typeof client_data === 'object' && client_data.value !== undefined
+        const checkbox = clickable && this.multiple
+        this.displayItems.push({
+          client_data,
+          title: typeof client_data === 'string' ? client_data : client_data.name,
+          clickable,
+          checkbox
+        })
+        this.selected.push(checkbox && client_data.selected)
+      })
     },
-    mounted() {
+    mounted () {
       if (this.value) window.addEventListener('click', this.windowClick)
     },
     beforeDestroy () {
       if (this.value) window.removeEventListener('click', this.windowClick)
     },
     data: () => ({
+      displayItems: [],
       selected: []
       // autoId: Math.floor(Math.random() * 999)
     })

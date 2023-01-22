@@ -3,8 +3,10 @@
     <no-menu
       v-model="displayMenu"
       :items="items"
+      :selected="multiple ? localMultipleValues : localValue"
       :close-at-click="false"
       :multiple="multiple"
+      :return-type="returnType"
       @select="select"
     >
       <no-input-text
@@ -23,18 +25,16 @@
 
   import NoInputText from './no-input-text.vue'
   import NoMenu from '../no-menu.vue'
-  // import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-select",
-    // mixins: [modelInput],
     components: {
       NoMenu,
       NoInputText
     },
     props: {
       value: {
-        type: [String, Number],
+        type: [String, Number, Array],
         default: null
       },
       items: {
@@ -63,38 +63,80 @@
       } */
     },
     watch: {
-      localValue ({ item, index }) {
+      value () {
+        if (this.multiple) {
+          this.localMultipleValues = this.value
+        } else {
+          this.localValue = this.value
+        }
+      },
+      localValue ({ data, index }) {
+        let res = data
         switch (this.returnType) {
           case 'value':
-            this.$emit('input', typeof item === 'object' ? item.value : item)
+            res = typeof data === 'object' ? data.value : data
             break
           case 'index':
-            this.$emit(index)
+            res = index
             break
-          case 'object':
+          /* case 'object':
           default:
-            this.$emit(item)
-            break
+            res = item
+            break */
         }
-        this.textDisplay = item === null
+        this.updateTitle(data)
+        this.$emit('input', res)
+      },
+      localMultipleValues (items) {
+        const res_emit = []
+        const res_title = []
+        if (items) {
+          items.forEach(item => {
+            if (this.returnType === 'value' && typeof this.items[item] === 'object') {
+              res_emit.push(this.items[item].value)
+              res_title.push(this.titleItem(this.items[item]))
+            }
+          })
+        }
+        this.textDisplay = res_title.join(', ')
+        console.log(res_emit)
+        this.$emit('input', res_emit)
+      }
+    },
+    methods: {
+      select (value, multiple) {
+        if (!!multiple) {
+          this.localMultipleValues = value
+        } else {
+          this.localValue = value
+        }
+      },
+      titleItem (item) {
+        return item === null
           ? ''
-          : this.textDisplay = typeof item === 'object'
+          : typeof item === 'object'
             ? item.name !== undefined
               ? item.name
               : item.value
             : item
+      },
+      updateTitle (data) {
+        this.textDisplay = this.titleItem(data)
       }
     },
-    methods: {
-      select (item, index) {
-        console.log(item, index)
-        this.localValue = { item, index }
+    created () {
+      if (this.multiple) {
+        // console.log(this.value)
+        this.localMultipleValues = this.value
+      } else {
+        this.localValue = this.value
       }
     },
     data: () => ({
       displayMenu: false,
       textDisplay: '',
-      localValue: null
+      localValue: null,
+      localMultipleValues: []
       // returnValueMultiple: []
     })
   }

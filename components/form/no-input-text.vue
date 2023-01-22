@@ -75,7 +75,7 @@
       },
     },
     data: () => ({
-      mdiIcon
+      mdiIcon,
     })
   }
 
