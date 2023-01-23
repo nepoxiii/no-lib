@@ -3,14 +3,14 @@
     <no-menu
       v-model="displayMenu"
       :items="items"
-      :selected="multiple ? localMultipleValues : localValue"
-      :close-at-click="false"
+      :selected="localValue"
+      :close-at-click="true"
       :multiple="multiple"
       :return-type="returnType"
       @select="select"
     >
       <no-input-text
-        v-model="textDisplay"
+        :value="textDisplay"
         :placeholder="placeholder"
         :readonly="true"
         :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
@@ -64,14 +64,10 @@
     },
     watch: {
       value () {
-        if (this.multiple) {
-          this.localMultipleValues = this.value
-        } else {
-          this.localValue = this.value
-        }
+        this.localValue = this.value
       },
-      localValue ({ data, index }) {
-        let res = data
+      localValue (item) {
+        /* let res = data
         switch (this.returnType) {
           case 'value':
             res = typeof data === 'object' ? data.value : data
@@ -79,15 +75,15 @@
           case 'index':
             res = index
             break
-          /* case 'object':
-          default:
-            res = item
-            break */
+          // case 'object':
+          // default:
+          //   res = item
+          //   break
         }
-        this.updateTitle(data)
-        this.$emit('input', res)
+        this.updateTitle(data) */
+        this.$emit('input', item)
       },
-      localMultipleValues (items) {
+      /* localMultipleValues (items) {
         const res_emit = []
         const res_title = []
         if (items) {
@@ -99,19 +95,14 @@
           })
         }
         this.textDisplay = res_title.join(', ')
-        console.log(res_emit)
         this.$emit('input', res_emit)
-      }
+      } */
     },
     methods: {
-      select (value, multiple) {
-        if (!!multiple) {
-          this.localMultipleValues = value
-        } else {
-          this.localValue = value
-        }
+      select (value) {
+        this.localValue = value
       },
-      titleItem (item) {
+      /* titleItem (item) {
         return item === null
           ? ''
           : typeof item === 'object'
@@ -119,25 +110,25 @@
               ? item.name
               : item.value
             : item
-      },
-      updateTitle (data) {
+      }, */
+      /* updateTitle (data) {
         this.textDisplay = this.titleItem(data)
+      } */
+    },
+    computed: {
+      selected () {
+
+      },
+      textDisplay () {
+        return this.localValue
       }
     },
     created () {
-      if (this.multiple) {
-        // console.log(this.value)
-        this.localMultipleValues = this.value
-      } else {
-        this.localValue = this.value
-      }
+      this.localValue = this.value
     },
     data: () => ({
       displayMenu: false,
-      textDisplay: '',
-      localValue: null,
-      localMultipleValues: []
-      // returnValueMultiple: []
+      localValue: null
     })
   }
 

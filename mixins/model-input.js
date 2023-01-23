@@ -9,7 +9,6 @@ export const modelInput = {
     }
   },
   created () {
-    console.log(this.value)
     this.localValue = this.value
   },
   data: () => ({

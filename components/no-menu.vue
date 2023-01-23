@@ -11,10 +11,10 @@
         <span
           v-for="(item, index) in displayItems"
           :key="'item-' + index"
-          :class="{ clickable: item.clickable }"
-          @click="itemClick(item, index)"
+          :class="{ clickable: item.clickable, selected: index === findSelected }"
+          @click="itemClick(item)"
         >
-          <no-input-checkbox v-if="item.checkbox" v-model="selected[index]">
+          <no-input-checkbox v-if="item.checkbox">
             {{ item.title }}
           </no-input-checkbox>
           <template v-else>
@@ -46,10 +46,10 @@
         type: Array,
         default: () => []
       },
-      /* selected: {
-        type: Array,
-        default: () => []
-      }, */
+      selected: {
+        type: [String, Number, Array],
+        default: null
+      },
       returnType: {
         type: String,
         default: 'value' // index / object / value
@@ -71,17 +71,17 @@
           window.removeEventListener('click', this.windowClick)
         }
       },
-      selected (value) {
+      /* selected (value) {
         this.$emit('select', value.reduce((res, selected, index) => {
           if (selected) res.push(index)
           return res
         }, []), true)
-      }
+      } */
     },
     methods: {
-      itemClick ({ client_data, checkbox }, index) {
+      itemClick ({ client_data, checkbox }) {
         if (!this.multiple && !checkbox) {
-          this.$emit('select', { data: client_data, index })
+          this.$emit('select', client_data)
         }
         if (this.closeAtClick) {
           this.localValue = false
@@ -97,9 +97,14 @@
         this.localValue = !this.localValue
       },
     },
+    computed: {
+      findSelected () {
+        return this.items.findIndex(item => item === this.selected)
+      }
+    },
     created () {
       this.items.forEach(client_data => {
-        const clickable = typeof client_data === 'object' && client_data.value !== undefined
+        const clickable = client_data.clickable !== false
         const checkbox = clickable && this.multiple
         this.displayItems.push({
           client_data,
@@ -107,7 +112,7 @@
           clickable,
           checkbox
         })
-        this.selected.push(checkbox && client_data.selected)
+        // this.selected.push(checkbox && client_data.selected)
       })
     },
     mounted () {
@@ -118,7 +123,7 @@
     },
     data: () => ({
       displayItems: [],
-      selected: []
+      // selected: []
       // autoId: Math.floor(Math.random() * 999)
     })
   }
@@ -146,6 +151,11 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+  }
+
+  .menu-window:not(.fullWidth)
+  {
+    max-width: calc(500px - 10px);
   }
 
   .menu-window > *
@@ -183,6 +193,17 @@
   .menu-window > *.clickable:not(:has(.no-input-checkbox)):active
   {
     background-color: rgba(var(--bleu-rgb), .5);
+  }
+
+  .menu-window > *.selected:not(:has(.no-input-checkbox))
+  {
+    background-color: var(--bleu);
+    color: white;
+  }
+
+  .menu-window > *.selected:not(:has(.no-input-checkbox)):hover
+  {
+    background-color: rgba(var(--bleu-rgb), .8);
   }
 
   .menu-window .no-input-checkbox
