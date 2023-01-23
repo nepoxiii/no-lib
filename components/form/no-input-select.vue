@@ -14,7 +14,7 @@
       <no-input-text
         :value="textDisplay"
         :placeholder="placeholder"
-        :readonly="true"
+        :readonly="!text"
         :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
       >
         <slot />
@@ -58,6 +58,10 @@
         default: ''
       },
       multiple: {
+        type: Boolean,
+        default: false
+      },
+      text: {
         type: Boolean,
         default: false
       },

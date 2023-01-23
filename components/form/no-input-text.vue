@@ -151,13 +151,6 @@
     background-color: transparent;
   }
 
-  .input-text
-  {
-    user-select: none !important;
-    outline: none !important;
-    pointer-events:none !important;
-  }
-
   .icon-right
   {
     position: absolute;
