@@ -7,18 +7,18 @@
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-if="localValue" class="menu-window">
+      <div v-show="localValue" class="menu-window">
         <span
           v-for="(item, index) in displayItems"
           :key="'item-' + index"
-          :class="{ clickable: item.clickable, selected: item.selected }"
+          :class="{ clickable: item.clickable, selected: findSelected === index }"
           @click="itemClick(item)"
         >
           <no-input-checkbox
             v-if="item.checkbox"
-            v-model="item.selected"
+            v-model="item.checked"
+            @input="v => itemCheck(item, v)"
           >
-            <!-- @input="v => itemCheck(item, v)" -->
             {{ item.title }}
           </no-input-checkbox>
           <template v-else>
@@ -87,7 +87,6 @@
           window.removeEventListener('click', this.windowClick)
         }
       },
-      // listen here for check ?
     },
     methods: {
       getName (data) {
@@ -110,23 +109,24 @@
         }
       },
       itemCheck ({ client_data, checkbox }, value) {
-        const returnValue = this.returnObject || typeof client_data !== 'object'
-          ? client_data
-          : client_data.value
-        if (returnValue !== undefined) {
-          if (this.multiple && checkbox) {
-            const getArray = this.selected ? [...this.selected] : []
-            const findIndex = getArray.findIndex(item => item === returnValue)
-            if (findIndex === -1 && value) {
-              getArray.push(returnValue)
-            } else if (!value) {
-              getArray.splice(findIndex, 1)
+        if (this.localValue) {
+          const returnValue = this.returnObject || typeof client_data !== 'object'
+            ? client_data
+            : client_data.value
+          if (returnValue !== undefined) {
+            if (this.multiple && checkbox) {
+              const getArray = this.selected ? [...this.selected] : []
+              const findIndex = getArray.findIndex(item => item === returnValue)
+              if (findIndex === -1 && value) {
+                getArray.push(returnValue)
+              } else if (!value) {
+                getArray.splice(findIndex, 1)
+              }
+              this.$emit('select', getArray)
             }
-            console.log('select itemCheck')
-            this.$emit('select', getArray)
-          }
-          if (this.closeAtClick) {
-            this.localValue = false
+            if (this.closeAtClick) {
+              this.localValue = false
+            }
           }
         }
       },
@@ -142,38 +142,28 @@
     },
     computed: {
       findSelected () {
-        return this.items.findIndex(item => typeof item !== 'object'
-          ? String(item) === String(this.selected)
-          : String(item[this.itemValue]) === String(this.selected)
-        )
+        if (!this.multiple) {
+          return this.items.findIndex(item => typeof item !== 'object'
+            ? String(item) === String(this.selected)
+            : String(item[this.itemValue]) === String(this.selected)
+          )
+        } else {
+          return false
+        }
       }
     },
     created () {
-      /* this.items.forEach(client_data => {
-        const clickable = client_data.clickable !== false
-        const checkbox = clickable && this.multiple
-        this.displayItems.push({
-          client_data,
-          title: typeof client_data === 'object' ? client_data.name : client_data,
-          clickable,
-          checkbox
-        })
-      }) */
       this.displayItems = this.items.map(client_data => {
         const clickable = client_data.clickable !== false
+        const title = typeof client_data === 'object' ? client_data.name : client_data
         const checkbox = clickable && this.multiple
-        let selected
-        if (typeof this.selected !== 'object') {
-          selected = this.getValue(client_data) === String(this.selected)
-        } else {
-          selected = (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
-        }
+        const checked = checkbox && (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
         return {
           client_data,
-          title: typeof client_data === 'object' ? client_data.name : client_data,
-          selected,
+          title,
+          checked,
           clickable,
-          checkbox
+          checkbox,
         }
       })
     },
