@@ -11,10 +11,14 @@
         <span
           v-for="(item, index) in displayItems"
           :key="'item-' + index"
-          :class="{ clickable: item.clickable, selected: index === findSelected }"
+          :class="{ clickable: item.clickable, selected: item.selected }"
           @click="itemClick(item)"
         >
-          <no-input-checkbox v-if="item.checkbox">
+          <no-input-checkbox
+            v-if="item.checkbox"
+            v-model="item.selected"
+          >
+            <!-- @input="v => itemCheck(item, v)" -->
             {{ item.title }}
           </no-input-checkbox>
           <template v-else>
@@ -50,9 +54,13 @@
         type: [String, Number, Array],
         default: null
       },
-      returnType: {
+      /* returnType: {
         type: String,
         default: 'value' // index / object / value
+      }, */
+      returnObject: {
+        type: Boolean,
+        default: false
       },
       closeAtClick: {
         type: Boolean,
@@ -61,6 +69,14 @@
       multiple: {
         type: Boolean,
         default: false
+      },
+      itemValue: {
+        type: String,
+        default: 'value'
+      },
+      itemName: {
+        type: String,
+        default: 'name'
       }
     },
     watch: {
@@ -71,20 +87,47 @@
           window.removeEventListener('click', this.windowClick)
         }
       },
-      /* selected (value) {
-        this.$emit('select', value.reduce((res, selected, index) => {
-          if (selected) res.push(index)
-          return res
-        }, []), true)
-      } */
+      // listen here for check ?
     },
     methods: {
+      getName (data) {
+        return typeof data !== 'object' ? data : data[this.itemName]
+      },
+      getValue (data) {
+        return String(typeof data !== 'object' ? data : data[this.itemValue])
+      },
       itemClick ({ client_data, checkbox }) {
-        if (!this.multiple && !checkbox) {
-          this.$emit('select', client_data)
+        const returnValue = this.returnObject || typeof client_data !== 'object'
+          ? client_data
+          : client_data.value
+        if (returnValue !== undefined) {
+          if (!this.multiple && !checkbox) {
+            this.$emit('select', returnValue)
+          }
+          if (this.closeAtClick) {
+            this.localValue = false
+          }
         }
-        if (this.closeAtClick) {
-          this.localValue = false
+      },
+      itemCheck ({ client_data, checkbox }, value) {
+        const returnValue = this.returnObject || typeof client_data !== 'object'
+          ? client_data
+          : client_data.value
+        if (returnValue !== undefined) {
+          if (this.multiple && checkbox) {
+            const getArray = this.selected ? [...this.selected] : []
+            const findIndex = getArray.findIndex(item => item === returnValue)
+            if (findIndex === -1 && value) {
+              getArray.push(returnValue)
+            } else if (!value) {
+              getArray.splice(findIndex, 1)
+            }
+            console.log('select itemCheck')
+            this.$emit('select', getArray)
+          }
+          if (this.closeAtClick) {
+            this.localValue = false
+          }
         }
       },
       windowClick (e) {
@@ -99,20 +142,39 @@
     },
     computed: {
       findSelected () {
-        return this.items.findIndex(item => item === this.selected)
+        return this.items.findIndex(item => typeof item !== 'object'
+          ? String(item) === String(this.selected)
+          : String(item[this.itemValue]) === String(this.selected)
+        )
       }
     },
     created () {
-      this.items.forEach(client_data => {
+      /* this.items.forEach(client_data => {
         const clickable = client_data.clickable !== false
         const checkbox = clickable && this.multiple
         this.displayItems.push({
           client_data,
-          title: typeof client_data === 'string' ? client_data : client_data.name,
+          title: typeof client_data === 'object' ? client_data.name : client_data,
           clickable,
           checkbox
         })
-        // this.selected.push(checkbox && client_data.selected)
+      }) */
+      this.displayItems = this.items.map(client_data => {
+        const clickable = client_data.clickable !== false
+        const checkbox = clickable && this.multiple
+        let selected
+        if (typeof this.selected !== 'object') {
+          selected = this.getValue(client_data) === String(this.selected)
+        } else {
+          selected = (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
+        }
+        return {
+          client_data,
+          title: typeof client_data === 'object' ? client_data.name : client_data,
+          selected,
+          clickable,
+          checkbox
+        }
       })
     },
     mounted () {

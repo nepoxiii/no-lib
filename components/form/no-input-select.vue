@@ -4,9 +4,11 @@
       v-model="displayMenu"
       :items="items"
       :selected="localValue"
-      :close-at-click="true"
+      :close-at-click="!multiple"
       :multiple="multiple"
-      :return-type="returnType"
+      :return-object="returnObject"
+      :item-value="itemValue"
+      :item-name="itemName"
       @select="select"
     >
       <no-input-text
@@ -25,9 +27,11 @@
 
   import NoInputText from './no-input-text.vue'
   import NoMenu from '../no-menu.vue'
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-select",
+    mixins: [modelInput],
     components: {
       NoMenu,
       NoInputText
@@ -41,9 +45,13 @@
         type: Array,
         default: () => []
       },
-      returnType: {
+      /* returnType: {
         type: String,
         default: 'value' // index / object / value
+      }, */
+      returnObject: {
+        type: Boolean,
+        default: false
       },
       placeholder: {
         type: String,
@@ -53,82 +61,44 @@
         type: Boolean,
         default: false
       },
-      textEntry: {
-        type: Boolean,
-        default: false
+      itemValue: {
+        type: String,
+        default: 'value'
       },
+      itemName: {
+        type: String,
+        default: 'name'
+      }
       /* clearable: {
         type: Boolean,
         default: false
-      } */
-    },
-    watch: {
-      value () {
-        this.localValue = this.value
-      },
-      localValue (item) {
-        /* let res = data
-        switch (this.returnType) {
-          case 'value':
-            res = typeof data === 'object' ? data.value : data
-            break
-          case 'index':
-            res = index
-            break
-          // case 'object':
-          // default:
-          //   res = item
-          //   break
-        }
-        this.updateTitle(data) */
-        this.$emit('input', item)
-      },
-      /* localMultipleValues (items) {
-        const res_emit = []
-        const res_title = []
-        if (items) {
-          items.forEach(item => {
-            if (this.returnType === 'value' && typeof this.items[item] === 'object') {
-              res_emit.push(this.items[item].value)
-              res_title.push(this.titleItem(this.items[item]))
-            }
-          })
-        }
-        this.textDisplay = res_title.join(', ')
-        this.$emit('input', res_emit)
       } */
     },
     methods: {
       select (value) {
         this.localValue = value
       },
-      /* titleItem (item) {
-        return item === null
-          ? ''
-          : typeof item === 'object'
-            ? item.name !== undefined
-              ? item.name
-              : item.value
-            : item
-      }, */
-      /* updateTitle (data) {
-        this.textDisplay = this.titleItem(data)
-      } */
+      getName (data) {
+        return typeof data !== 'object' ? data : data[this.itemName]
+      },
+      getValue (data) {
+        return String(typeof data !== 'object' ? data : data[this.itemValue])
+      },
     },
     computed: {
-      selected () {
-
-      },
       textDisplay () {
-        return this.localValue
+        if (this.multiple) {
+          return this.items
+            .filter(item => (this.localValue || []).findIndex(ref_item => String(ref_item) === this.getValue(item)) !== -1)
+            .map(item => this.getName(item))
+            .join(', ')
+        } else {
+          return this.getName(this.items.find(item => String(this.localValue) === this.getValue(item)))
+        }
       }
     },
-    created () {
-      this.localValue = this.value
-    },
     data: () => ({
-      displayMenu: false,
-      localValue: null
+      displayMenu: false
     })
   }
 
