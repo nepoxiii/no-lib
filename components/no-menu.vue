@@ -1,24 +1,28 @@
 <template>
   <div
-    :class="{ 'no-menu-open': display }"
+    :class="{ 'no-menu-open': localValue }"
     class="no-lib no-menu"
   >
     <div @click="componentClick">
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-if="display" class="menu-window">
+      <div v-show="localValue" class="menu-window">
         <span
-          v-for="(item, index) in items"
+          v-for="(item, index) in displayItems"
           :key="'item-' + index"
-          :class="{ clickable: typeof item === 'object' ? item.value : false }"
-          @click="itemClick(item, index)"
+          :class="{ clickable: item.clickable, selected: findSelected === index }"
+          @click="itemClick(item)"
         >
-          <no-input-checkbox v-if="multiple && typeof item === 'object' && item.value !== undefined">
-            {{ typeof item === 'string' ? item : item.name }}
+          <no-input-checkbox
+            v-if="item.checkbox"
+            v-model="item.checked"
+            @input="v => itemCheck(item, v)"
+          >
+            {{ item.title }}
           </no-input-checkbox>
           <template v-else>
-            {{ typeof item === 'string' ? item : item.name }}
+            {{ item.title }}
           </template>
         </span>
       </div>
@@ -29,9 +33,11 @@
 <script>
 
   import NoInputCheckbox from './form/no-input-checkbox.vue'
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-menu",
+    mixins: [modelInput],
     components: {
       NoInputCheckbox
     },
@@ -44,6 +50,18 @@
         type: Array,
         default: () => []
       },
+      selected: {
+        type: [String, Number, Array],
+        default: null
+      },
+      /* returnType: {
+        type: String,
+        default: 'value' // index / object / value
+      }, */
+      returnObject: {
+        type: Boolean,
+        default: false
+      },
       closeAtClick: {
         type: Boolean,
         default: true
@@ -51,6 +69,14 @@
       multiple: {
         type: Boolean,
         default: false
+      },
+      itemValue: {
+        type: String,
+        default: 'value'
+      },
+      itemName: {
+        type: String,
+        default: 'name'
       }
     },
     watch: {
@@ -60,45 +86,96 @@
         } else {
           window.removeEventListener('click', this.windowClick)
         }
-      }
+      },
     },
     methods: {
-      itemClick (item, index) {
-        if (typeof item === 'string' || item.value !== undefined) {
-          this.$emit('select', item, index)
+      getName (data) {
+        return typeof data !== 'object' ? data : data[this.itemName]
+      },
+      getValue (data) {
+        return String(typeof data !== 'object' ? data : data[this.itemValue])
+      },
+      itemClick ({ client_data, checkbox }) {
+        const returnValue = this.returnObject || typeof client_data !== 'object'
+          ? client_data
+          : client_data.value
+        if (returnValue !== undefined) {
+          if (!this.multiple && !checkbox) {
+            this.$emit('select', returnValue)
+          }
+          if (this.closeAtClick) {
+            this.localValue = false
+          }
         }
-        if (this.closeAtClick) {
-          this.display = false
+      },
+      itemCheck ({ client_data, checkbox }, value) {
+        if (this.localValue) {
+          const returnValue = this.returnObject || typeof client_data !== 'object'
+            ? client_data
+            : client_data.value
+          if (returnValue !== undefined) {
+            if (this.multiple && checkbox) {
+              const getArray = this.selected ? [...this.selected] : []
+              const findIndex = getArray.findIndex(item => item === returnValue)
+              if (findIndex === -1 && value) {
+                getArray.push(returnValue)
+              } else if (!value) {
+                getArray.splice(findIndex, 1)
+              }
+              this.$emit('select', getArray)
+            }
+            if (this.closeAtClick) {
+              this.localValue = false
+            }
+          }
         }
       },
       windowClick (e) {
         const get_path = e.path || e.composedPath() || []
         if (get_path.findIndex(el => typeof el.className === 'string' && el.className.split(' ').includes('no-menu')) === -1) {
-          this.display = false
+          this.localValue = false
         }
       },
       componentClick () {
-        this.display = !this.display
+        this.localValue = !this.localValue
       },
     },
     computed: {
-      display: {
-        get () {
-          return this.value
-        },
-        set (value) {
-          this.$emit('input', value)
+      findSelected () {
+        if (!this.multiple) {
+          return this.items.findIndex(item => typeof item !== 'object'
+            ? String(item) === String(this.selected)
+            : String(item[this.itemValue]) === String(this.selected)
+          )
+        } else {
+          return false
         }
       }
     },
-    mounted() {
+    created () {
+      this.displayItems = this.items.map(client_data => {
+        const clickable = client_data.clickable !== false
+        const title = typeof client_data === 'object' ? client_data.name : client_data
+        const checkbox = clickable && this.multiple
+        const checked = checkbox && (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
+        return {
+          client_data,
+          title,
+          checked,
+          clickable,
+          checkbox,
+        }
+      })
+    },
+    mounted () {
       if (this.value) window.addEventListener('click', this.windowClick)
     },
     beforeDestroy () {
       if (this.value) window.removeEventListener('click', this.windowClick)
     },
     data: () => ({
-      selected: []
+      displayItems: [],
+      // selected: []
       // autoId: Math.floor(Math.random() * 999)
     })
   }
@@ -126,6 +203,11 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+  }
+
+  .menu-window:not(.fullWidth)
+  {
+    max-width: calc(500px - 10px);
   }
 
   .menu-window > *
@@ -163,6 +245,17 @@
   .menu-window > *.clickable:not(:has(.no-input-checkbox)):active
   {
     background-color: rgba(var(--bleu-rgb), .5);
+  }
+
+  .menu-window > *.selected:not(:has(.no-input-checkbox))
+  {
+    background-color: var(--bleu);
+    color: white;
+  }
+
+  .menu-window > *.selected:not(:has(.no-input-checkbox)):hover
+  {
+    background-color: rgba(var(--bleu-rgb), .8);
   }
 
   .menu-window .no-input-checkbox

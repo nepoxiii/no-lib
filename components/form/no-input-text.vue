@@ -75,7 +75,7 @@
       },
     },
     data: () => ({
-      mdiIcon
+      mdiIcon,
     })
   }
 
@@ -144,6 +144,18 @@
   .input-text input:not(:read-only):focus::placeholder
   {
     opacity: .2;
+  }
+
+  .input-text input:read-only::selection
+  {
+    background-color: transparent;
+  }
+
+  .input-text
+  {
+    user-select: none !important;
+    outline: none !important;
+    pointer-events:none !important;
   }
 
   .icon-right

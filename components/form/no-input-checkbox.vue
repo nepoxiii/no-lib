@@ -1,5 +1,5 @@
 <template>
-  <label class="no-lib no-input-checkbox">
+  <label class="no-lib no-input-checkbox" @click="componentClick">
     <span class="container-no-input-checkbox">
       <span class="checkbox-case" :class="{ unselected: !localValue }">
         <transition name="fast-fade">
@@ -10,7 +10,7 @@
     <span v-if="isSlot">
       <slot />
     </span>
-    <input v-show="false" type="checkbox" v-model="localValue" />
+    <input v-show="false" type="checkbox" v-model="localValue" @click.stop />
   </label>
 </template>
 
@@ -25,6 +25,11 @@
       value: {
         type: Boolean,
         default: false
+      }
+    },
+    methods: {
+      componentClick (e) {
+        this.$emit('click', e)
       }
     },
     computed: {
