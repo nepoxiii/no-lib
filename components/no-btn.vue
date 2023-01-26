@@ -176,13 +176,12 @@
     content: '';
     height: 19px;
     width: 19px;
-    background-color: var(--background-color);
+    background-color: transparent;
     border-width: 2px;
+    border-color: transparent;
     border-style: solid;
-    border-left-color: var(--background-color);
-    border-right-color: var(--color);
-    border-top-color: var(--background-color);
-    border-bottom-color: var(--color);
+    border-left-color: var(--color);
+    border-top-color: var(--color);
     border-radius: 50px;
     position: absolute;
     inset: 0;
