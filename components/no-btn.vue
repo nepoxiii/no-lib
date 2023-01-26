@@ -1,5 +1,10 @@
 <template>
-  <button class="no-lib no-btn" :type="type" @click="e => $emit('click', e)">
+  <button
+    class="no-lib no-btn"
+    :class="{ loading }"
+    :type="type"
+    @click="e => $emit('click', e)"
+  >
     <span>
       <slot />
     </span>
@@ -14,15 +19,16 @@
       type: {
         type: String,
         default: null
+      },
+      loading: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
       }
-    },
-    mounted () {
-      console.log('coup dur')
     }
   }
 
@@ -66,10 +72,7 @@
   {
     content: var(--emoji);
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    inset: 0;
     height: 100%;
     width: 100%;
     display: flex;
@@ -166,6 +169,40 @@
   .no-btn.flat.tertiary.white
   {
     border-color: white;
+  }
+
+  .no-btn.loading:before
+  {
+    content: '';
+    height: 19px;
+    width: 19px;
+    background-color: var(--background-color);
+    border-width: 2px;
+    border-style: solid;
+    border-left-color: var(--background-color);
+    border-right-color: var(--background-color);
+    border-top-color: var(--color);
+    border-bottom-color: var(--color);
+    border-radius: 50px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    transition: .3s;
+    animation: rotate-simple .4s infinite linear;
+  }
+
+  .no-btn.loading span,
+  .no-btn.loading:after
+  {
+    opacity: 0;
+  }
+
+  @keyframes rotate-simple {
+    from { transform: rotate(360deg) }
+    to { transform: rotate(0) }
   }
 
 </style>
