@@ -121,6 +121,12 @@
     transition: .3s;
   }
 
+  .input-text input:disabled
+  {
+    background-color: rgb(240,240,240);
+    border-color: rgb(240,240,240);
+  }
+
   .input-text input:focus,
   .no-menu-open .input-text input
   {
@@ -128,7 +134,7 @@
     border-color: var(--bleu);
   }
 
-  .input-text:hover,
+  .input-text:has(input:not(:disabled)):hover,
   .input-text:has(input:focus),
   .no-menu-open .input-text
   {
