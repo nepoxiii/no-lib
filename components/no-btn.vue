@@ -190,7 +190,7 @@
     align-items: center;
     justify-content: center;
     margin: auto;
-    transition: .3s;
+    transition: .2s;
     animation: rotate-simple .4s infinite linear;
     opacity: 0;
   }
