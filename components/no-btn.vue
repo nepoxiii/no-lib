@@ -180,8 +180,8 @@
     border-width: 2px;
     border-style: solid;
     border-left-color: var(--background-color);
-    border-right-color: var(--background-color);
-    border-top-color: var(--color);
+    border-right-color: var(--color);
+    border-top-color: var(--background-color);
     border-bottom-color: var(--color);
     border-radius: 50px;
     position: absolute;
