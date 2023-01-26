@@ -84,7 +84,7 @@
         return !!this.$slots?.default?.length
       },
       displayIconRight () {
-        if (this.eye) return this.showPassword ? 'eye-off-outline' : 'eye-outline'
+        if (this.eye) return this.showPassword ? 'eye-outline' : 'eye-off-outline'
         return this.iconRight
       },
       displayType () {
