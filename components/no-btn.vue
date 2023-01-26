@@ -171,7 +171,7 @@
     border-color: white;
   }
 
-  .no-btn.loading:before
+  .no-btn:before
   {
     content: '';
     height: 19px;
@@ -192,6 +192,12 @@
     margin: auto;
     transition: .3s;
     animation: rotate-simple .4s infinite linear;
+    opacity: 0;
+  }
+
+  .no-btn.loading:before
+  {
+    opacity: 1;
   }
 
   .no-btn.loading span,
