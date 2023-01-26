@@ -2,9 +2,10 @@
 vue.js components library
 
 ## Add to your project
-- Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put/no-lib`.  
+- Install with `git submodule add https://github.com/nepoxiii/no-lib.git the-path-you-want-to-put/no-lib`.
+  (Don't use /components directory)
 - Add `no-style.css` path in your `nuxt.config.js`.  
-Use like classic component you know.
+- Use like classic component you know. Import exemple : `import noInputCheckbox from 'assets/no-lib/components/form/no-input-checkbox.vue'`
 
 ## Change the colors
 You can overwrite css and specially the variables use in `no-style.css` by create a new .css sheet.

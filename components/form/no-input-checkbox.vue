@@ -1,27 +1,26 @@
 <template>
-  <span class="no-lib no-input-checkbox" @click="select">
+  <label class="no-lib no-input-checkbox" @click="componentClick">
     <span class="container-no-input-checkbox">
-      <span class="checkbox-case" :class="{ unselected: !value_input }">
+      <span class="checkbox-case" :class="{ unselected: !localValue }">
         <transition name="fast-fade">
-          <span v-if="value_input">👍</span>
+          <span v-if="localValue">👍</span>
         </transition>
       </span>
     </span>
     <span v-if="isSlot">
       <slot />
     </span>
-    <input v-show="false" type="checkbox" v-model="value_input" />
-  </span>
+    <input v-show="false" type="checkbox" v-model="localValue" @click.stop />
+  </label>
 </template>
 
 <script>
 
-  /* import noStyle from './no-style.css'
-  import { useCssVars } from 'vue'
-  useCssVars(noStyle) */
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-checkbox",
+    mixins: [modelInput],
     props: {
       value: {
         type: Boolean,
@@ -29,22 +28,15 @@
       }
     },
     methods: {
-      select () {
-        this.value_input = !this.value_input
-        this.$emit('input', this.value_input)
+      componentClick (e) {
+        this.$emit('click', e)
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
       }
-    },
-    mounted () {
-      this.value_input = this.value
-    },
-    data: () => ({
-      value_input: false
-    })
+    }
   }
 
 </script>

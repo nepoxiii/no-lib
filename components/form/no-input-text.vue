@@ -1,30 +1,42 @@
 <template>
-  <span class="no-lib no-input-text" :class="{ fullWidth }">
+  <span
+    class="no-lib no-input-text"
+    :class="{ fullWidth }"
+    @click="componentClick"
+  >
     <label v-if="isSlot">
       <slot />
     </label>
     <span class="input-text">
       <input
-        v-model="text"
+        v-model="localValue"
         :type="type"
         :placeholder="placeholder"
+        :disabled="disabled"
+        :readonly="readonly"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
-      <span v-if="iconRight" class="icon-right" v-html="mdiIcon(iconRight, 'rgb(70,70,70)')" />
+      <span
+        v-if="iconRight"
+        class="icon-right"
+        v-html="mdiIcon(iconRight, 'rgb(100,100,100)')"
+      />
     </span>
   </span>
 </template>
 
 <script>
 
-  import { mdiIcon } from './mdi-icon'
+  import { mdiIcon } from '../../lib/mdi-icon'
+  import { modelInput } from 'assets/no-lib/mixins/model-input'
 
   export default {
     name: "no-input-text",
+    mixins: [modelInput],
     props: {
       value: {
-        type: String,
+        type: [String, Number],
         default: ''
       },
       placeholder: {
@@ -35,6 +47,14 @@
         type: String,
         default: 'text'
       },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      readonly: {
+        type: Boolean,
+        default: false
+      },
       fullWidth: {
         type: Boolean,
         default: false
@@ -44,9 +64,9 @@
         default: null
       }
     },
-    watch: {
-      text (value) {
-        this.$emit('input', value)
+    methods: {
+      componentClick (e) {
+        this.$emit('click', e)
       }
     },
     computed: {
@@ -54,12 +74,8 @@
         return !!this.$slots?.default?.length
       },
     },
-    created () {
-      this.text = this.value
-    },
     data: () => ({
       mdiIcon,
-      text: ''
     })
   }
 
@@ -76,6 +92,7 @@
 
   .input-text
   {
+    display: flex;
     padding: 5px;
     background-color: rgba(var(--bleu-rgb), 0);
     border-radius: 10px;
@@ -104,14 +121,16 @@
     transition: .3s;
   }
 
-  .input-text input:focus
+  .input-text input:focus,
+  .no-menu-open .input-text input
   {
     box-shadow: 0 0 5px var(--bleu);
     border-color: var(--bleu);
   }
 
   .input-text:hover,
-  .input-text:has(input:focus)
+  .input-text:has(input:focus),
+  .no-menu-open .input-text
   {
     background-color: rgba(var(--bleu-rgb), .3);
   }
@@ -122,9 +141,14 @@
     transition: .2s;
   }
 
-  .input-text input:focus::placeholder
+  .input-text input:not(:read-only):focus::placeholder
   {
     opacity: .2;
+  }
+
+  .input-text input:read-only::selection
+  {
+    background-color: transparent;
   }
 
   .icon-right
@@ -139,11 +163,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border-radius: 100px;
-    font-size: .8em;
-    color: rgb(80,80,80);
-    box-shadow: 0 0 5px rgba(255,255,255,1);
+  }
+
+  .input-text:has(.icon-right) input
+  {
+    padding-right: 30px;
   }
 
 </style>
