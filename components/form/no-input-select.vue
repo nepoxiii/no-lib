@@ -9,6 +9,7 @@
       :return-object="returnObject"
       :item-value="itemValue"
       :item-name="itemName"
+      :full-width="fullWidth"
       @select="select"
     >
       <no-input-text
