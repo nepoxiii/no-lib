@@ -1,6 +1,7 @@
 <template>
   <div class="no-lib no-input-select">
     <no-menu
+      ref="no-menu"
       v-model="displayMenu"
       :items="items"
       :selected="localValue"
@@ -87,6 +88,9 @@
     methods: {
       select (value) {
         this.localValue = value
+      },
+      selectItem (value) {
+        this.$refs['no-menu'].selectItem(value)
       },
       getName (data) {
         return typeof data !== 'object' ? data : data[this.itemName]
