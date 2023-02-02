@@ -72,7 +72,11 @@
       itemName: {
         type: String,
         default: 'name'
-      }
+      },
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
       /* clearable: {
         type: Boolean,
         default: false
