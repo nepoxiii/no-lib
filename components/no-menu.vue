@@ -1,13 +1,13 @@
 <template>
   <div
-    :class="{ 'no-menu-open': localValue, fullWidth }"
+    :class="{ 'no-menu-open': localValue }"
     class="no-lib no-menu"
   >
     <div @click="componentClick">
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-show="localValue" class="menu-window">
+      <div v-show="localValue" class="menu-window" :class="{ fullWidth }">
         <span
           v-for="(item, index) in displayItems"
           :key="'item-' + index"
@@ -207,6 +207,8 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+    max-height: 25vh;
+    overflow: auto;
   }
 
   .menu-window:not(.fullWidth)
