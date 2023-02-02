@@ -68,6 +68,14 @@
       eye: {
         type: Boolean,
         default: false
+      },
+      min: {
+        type: [String, Number],
+        default: null
+      },
+      max: {
+        type: [String, Number],
+        default: null
       }
     },
     methods: {
