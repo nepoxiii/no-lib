@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="{ 'no-menu-open': localValue }"
+    :class="{ 'no-menu-open': localValue, fullWidth }"
     class="no-lib no-menu"
   >
     <div @click="componentClick">
@@ -77,7 +77,11 @@
       itemName: {
         type: String,
         default: 'name'
-      }
+      },
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
     },
     watch: {
       value (value) {
