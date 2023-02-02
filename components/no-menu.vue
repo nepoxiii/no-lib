@@ -104,6 +104,16 @@
       getValue (data) {
         return String(typeof data !== 'object' ? data : data[this.itemValue])
       },
+      selectItem (data) {
+        const find = this.displayItems.find(({ client_data }) => this.getValue(client_data) === String(data))
+        if (find) {
+          // action on item
+          this.itemClick(find)
+          if (find.checkbox) this.itemCheck(find, !find.checked)
+        } else {
+          // new value
+        }
+      },
       itemClick ({ client_data, checkbox }) {
         const returnValue = this.returnObject || typeof client_data !== 'object'
           ? client_data
@@ -118,26 +128,26 @@
         }
       },
       itemCheck ({ client_data, checkbox }, value) {
-        if (this.localValue) {
-          const returnValue = this.returnObject || typeof client_data !== 'object'
-            ? client_data
-            : client_data.value
-          if (returnValue !== undefined) {
-            if (this.multiple && checkbox) {
-              const getArray = this.selected ? [...this.selected] : []
-              const findIndex = getArray.findIndex(item => item === returnValue)
-              if (findIndex === -1 && value) {
-                getArray.push(returnValue)
-              } else if (!value) {
-                getArray.splice(findIndex, 1)
-              }
-              this.$emit('select', getArray)
+        // if (this.localValue) {
+        const returnValue = this.returnObject || typeof client_data !== 'object'
+          ? client_data
+          : client_data.value
+        if (returnValue !== undefined) {
+          if (this.multiple && checkbox) {
+            const getArray = this.selected ? [...this.selected] : []
+            const findIndex = getArray.findIndex(item => item === returnValue)
+            if (findIndex === -1 && value) {
+              getArray.push(returnValue)
+            } else if (!value) {
+              getArray.splice(findIndex, 1)
             }
-            if (this.closeAtClick) {
-              this.localValue = false
-            }
+            this.$emit('select', getArray)
+          }
+          if (this.closeAtClick) {
+            this.localValue = false
           }
         }
+        // }
       },
       windowClick (e) {
         const get_path = e.path || e.composedPath() || []
