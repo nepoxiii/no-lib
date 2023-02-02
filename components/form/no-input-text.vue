@@ -184,6 +184,7 @@
   .input-text input:read-only::selection
   {
     background-color: transparent;
+    color: black;
   }
 
   .icon-right
