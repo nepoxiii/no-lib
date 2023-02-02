@@ -9,6 +9,7 @@
       :return-object="returnObject"
       :item-value="itemValue"
       :item-name="itemName"
+      :full-width="fullWidth"
       @select="select"
     >
       <no-input-text
@@ -16,6 +17,7 @@
         :placeholder="placeholder"
         :readonly="!text"
         :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
+        :full-width="fullWidth"
       >
         <slot />
       </no-input-text>
@@ -72,7 +74,11 @@
       itemName: {
         type: String,
         default: 'name'
-      }
+      },
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
       /* clearable: {
         type: Boolean,
         default: false

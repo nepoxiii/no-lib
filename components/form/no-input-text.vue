@@ -10,17 +10,21 @@
     <span class="input-text">
       <input
         v-model="localValue"
-        :type="type"
+        :type="displayType"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
+        :min="min"
+        :max="max"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
       <span
-        v-if="iconRight"
+        v-if="displayIconRight"
         class="icon-right"
-        v-html="mdiIcon(iconRight, 'rgb(100,100,100)')"
+        :class="{ eye }"
+        @click="clickIconRight"
+        v-html="mdiIcon(displayIconRight, 'rgb(100,100,100)')"
       />
     </span>
   </span>
@@ -62,20 +66,45 @@
       iconRight: {
         type: String,
         default: null
+      },
+      eye: {
+        type: Boolean,
+        default: false
+      },
+      min: {
+        type: [String, Number],
+        default: null
+      },
+      max: {
+        type: [String, Number],
+        default: null
       }
     },
     methods: {
       componentClick (e) {
         this.$emit('click', e)
+      },
+      clickIconRight (e) {
+        this.$emit('click:icon-right', e)
+        if (this.eye) this.showPassword = !this.showPassword
       }
     },
     computed: {
       isSlot () {
         return !!this.$slots?.default?.length
       },
+      displayIconRight () {
+        if (this.eye) return this.showPassword ? 'eye-outline' : 'eye-off-outline'
+        return this.iconRight
+      },
+      displayType () {
+        if (this.eye && this.type === 'password' && this.showPassword) return 'text'
+        return this.type
+      }
     },
     data: () => ({
       mdiIcon,
+      showPassword: false
     })
   }
 
@@ -155,6 +184,7 @@
   .input-text input:read-only::selection
   {
     background-color: transparent;
+    color: black;
   }
 
   .icon-right
@@ -169,6 +199,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+  }
+
+  .icon-right.eye
+  {
+    cursor: pointer;
   }
 
   .input-text:has(.icon-right) input

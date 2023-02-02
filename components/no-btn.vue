@@ -171,18 +171,17 @@
     border-color: white;
   }
 
-  .no-btn.loading:before
+  .no-btn:before
   {
     content: '';
     height: 19px;
     width: 19px;
-    background-color: var(--background-color);
+    background-color: transparent;
     border-width: 2px;
+    border-color: transparent;
     border-style: solid;
-    border-left-color: var(--background-color);
-    border-right-color: var(--background-color);
+    border-left-color: var(--color);
     border-top-color: var(--color);
-    border-bottom-color: var(--color);
     border-radius: 50px;
     position: absolute;
     inset: 0;
@@ -190,8 +189,14 @@
     align-items: center;
     justify-content: center;
     margin: auto;
-    transition: .3s;
-    animation: rotate-simple .4s infinite linear;
+    transition: .2s;
+    animation: rotate-simple .4s reverse infinite linear;
+    opacity: 0;
+  }
+
+  .no-btn.loading:before
+  {
+    opacity: 1;
   }
 
   .no-btn.loading span,

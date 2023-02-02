@@ -1,8 +1,10 @@
 export const modelInput = {
   // props: value
   watch: {
-    localValue (newValue) {
-      this.$emit('input', newValue)
+    localValue (newValue, oldValue) {
+      if (!!newValue !== !!oldValue) {
+        this.$emit('input', newValue)
+      }
     },
     value (value) {
       this.localValue = value

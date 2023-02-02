@@ -7,7 +7,7 @@
       <slot />
     </div>
     <transition name="no-fade-zoom">
-      <div v-show="localValue" class="menu-window">
+      <div v-show="localValue" class="menu-window" :class="{ fullWidth }">
         <span
           v-for="(item, index) in displayItems"
           :key="'item-' + index"
@@ -77,7 +77,11 @@
       itemName: {
         type: String,
         default: 'name'
-      }
+      },
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
     },
     watch: {
       value (value) {
@@ -87,6 +91,11 @@
           window.removeEventListener('click', this.windowClick)
         }
       },
+      selected (value) {
+        if (this.multiple && this.displayItems.filter(({ checked }) => checked).length !== value.length) {
+          this.initDisplayItems()
+        }
+      }
     },
     methods: {
       getName (data) {
@@ -139,6 +148,21 @@
       componentClick () {
         this.localValue = !this.localValue
       },
+      initDisplayItems () {
+        this.displayItems = this.items.map(client_data => {
+          const clickable = client_data.clickable !== false
+          const title = typeof client_data === 'object' ? client_data.name : client_data
+          const checkbox = clickable && this.multiple
+          const checked = checkbox && (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
+          return {
+            client_data,
+            title,
+            checked,
+            clickable,
+            checkbox,
+          }
+        })
+      }
     },
     computed: {
       findSelected () {
@@ -153,19 +177,7 @@
       }
     },
     created () {
-      this.displayItems = this.items.map(client_data => {
-        const clickable = client_data.clickable !== false
-        const title = typeof client_data === 'object' ? client_data.name : client_data
-        const checkbox = clickable && this.multiple
-        const checked = checkbox && (this.selected || []).findIndex(item => this.getValue(client_data) === String(item)) !== -1
-        return {
-          client_data,
-          title,
-          checked,
-          clickable,
-          checkbox,
-        }
-      })
+      this.initDisplayItems()
     },
     mounted () {
       if (this.value) window.addEventListener('click', this.windowClick)
@@ -203,6 +215,8 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+    max-height: 27vh;
+    overflow: auto;
   }
 
   .menu-window:not(.fullWidth)
