@@ -16,6 +16,7 @@
         :placeholder="placeholder"
         :readonly="!text"
         :icon-right="displayMenu ? 'chevron-up' : 'chevron-down'"
+        :full-width="fullWidth"
       >
         <slot />
       </no-input-text>
