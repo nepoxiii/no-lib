@@ -2,7 +2,11 @@ export const modelInput = {
   // props: value
   watch: {
     localValue (newValue, oldValue) {
-      if (!!newValue !== !!oldValue) {
+      if (typeof this.value === 'boolean') {
+        if (!!newValue !== !!oldValue) this.$emit('input', newValue)
+      } else if (oldValue === null) {
+        if (!!newValue) this.$emit('input', newValue)
+      } else if (oldValue !== newValue) {
         this.$emit('input', newValue)
       }
     },
