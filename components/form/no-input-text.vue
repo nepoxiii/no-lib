@@ -14,6 +14,8 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
+        :min="min"
+        :max="max"
         @focus="e => $emit('focus', e)"
         @focusout="e => $emit('focusout', e)"
       />
