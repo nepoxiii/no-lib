@@ -121,7 +121,7 @@
 <style scoped>
 
   .no-input-text,
-  .no-input-text >>> *
+  .no-input-text:deep(*)
   {
     cursor: pointer;
   }

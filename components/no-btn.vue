@@ -61,7 +61,7 @@
     transition: .2s;
   }
 
-  .no-btn >>> *
+  .no-btn:deep(*)
   {
     font-weight: 500;
     color: var(--color);
@@ -87,7 +87,7 @@
     opacity: 1;
   }
 
-  .no-btn:hover >>> *
+  .no-btn:hover:deep(*)
   {
     color: transparent;
   }
