@@ -237,7 +237,7 @@
     position: absolute;
     left: 15px;
     width: calc(100% - 30px);
-    height: 4px;
+    height: 3px;
     bottom: 5px;
     border-radius: 20px 20px 0 0;
     overflow: hidden;
@@ -246,16 +246,60 @@
   .loader
   {
     height: 100%;
-    width: 100%;
+    width: 0;
     left: 0;
-    right: auto;
     bottom: 0;
+    margin-left: auto;
+    margin-right: 0;
     position: absolute;
     background-color: var(--primary);
     animation: loading 1s ease-in-out infinite;
   }
 
   @keyframes loading {
+    0% {
+      width: 0;
+      left: 0;
+    }
+    20% {
+      left: 0;
+    }
+    50% {
+      width: 60%;
+    }
+    80% {
+      left: 100%;
+    }
+    100% {
+      left: 100%;
+      width: 0;
+    }
+  }
+
+  /* @keyframes loading-2 {
+    0% {
+      width: 0;
+      left: 0;
+    }
+    20% {
+      width: 40%;
+      left: 0;
+    }
+    40% {
+      width: 60%;
+      left: 20%;
+    }
+    70% {
+      width: 40%;
+      left: 70%;
+    }
+    100% {
+      width: 0;
+      left: 100%;
+    }
+  }
+
+  @keyframes loading-1 {
     0% {
       width: 0;
 
@@ -278,7 +322,7 @@
       right: 0;
       left: auto;
     }
-  }
+  } */
 
   .no-input-text.error
   {
