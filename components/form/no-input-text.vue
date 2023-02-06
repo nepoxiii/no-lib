@@ -13,7 +13,7 @@
         :type="displayType"
         :placeholder="placeholder"
         :disabled="disabled"
-        :readonly="readonly"
+        :readonly="readonly || loading"
         :min="min"
         :max="max"
         @focus="e => $emit('focus', e)"
@@ -26,6 +26,12 @@
         @click="clickIconRight"
         v-html="mdiIcon(displayIconRight, 'rgb(100,100,100)')"
       />
+      <span
+        v-if="loading"
+        class="content-loader"
+      >
+        <span class="loader" />
+      </span>
     </span>
   </span>
 </template>
@@ -57,6 +63,10 @@
       },
       readonly: {
         type: Boolean,
+        default: false
+      },
+      loading: {
+        type: [Boolean,Number],
         default: false
       },
       fullWidth: {
@@ -210,6 +220,54 @@
   .input-text:has(.icon-right) input
   {
     padding-right: 30px;
+  }
+
+  .content-loader
+  {
+    position: absolute;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: 4px;
+    bottom: 5px;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+  }
+
+  .loader
+  {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    position: absolute;
+    background-color: var(--bleu);
+    animation: loading 1s ease-in-out infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      width: 0;
+
+      left: 0;
+      right: auto;
+    }
+    50% {
+      width: 100%;
+
+      left: 0;
+      right: auto;
+    }
+    51% {
+      right: 0;
+      left: auto;
+    }
+    100% {
+      width: 0;
+
+      right: 0;
+      left: auto;
+    }
   }
 
 </style>
