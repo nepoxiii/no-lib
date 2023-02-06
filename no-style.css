@@ -2,6 +2,7 @@
 .no-lib
 {
   --rouge: #FF5353;
+  --rouge-rgb: 255,83,83;
   --rouge-2: #e53030;
   --light-rouge: #FFCCCC;
   --vert: #6CDC68;
