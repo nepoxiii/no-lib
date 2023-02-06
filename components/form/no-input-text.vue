@@ -131,6 +131,9 @@
 
   .no-input-text
   {
+    --primary: var(--bleu);
+    --primary-rgb: var(--bleu-rgb);
+
     display: flex;
     flex-direction: column;
     column-gap: 10px;
@@ -140,7 +143,7 @@
   {
     display: flex;
     padding: 5px;
-    background-color: rgba(var(--bleu-rgb), 0);
+    background-color: rgba(var(--primary-rgb), 0);
     border-radius: 10px;
     position: relative;
     transition: .3s;
@@ -176,15 +179,15 @@
   .input-text input:focus,
   .no-menu-open .input-text input
   {
-    box-shadow: 0 0 5px var(--bleu);
-    border-color: var(--bleu);
+    box-shadow: 0 0 5px var(--primary);
+    border-color: var(--primary);
   }
 
   .input-text:has(input:not(:disabled)):hover,
   .input-text:has(input:focus),
   .no-menu-open .input-text
   {
-    background-color: rgba(var(--bleu-rgb), .3);
+    background-color: rgba(var(--primary-rgb), .3);
   }
 
   .input-text input::placeholder
@@ -248,7 +251,7 @@
     right: auto;
     bottom: 0;
     position: absolute;
-    background-color: var(--bleu);
+    background-color: var(--primary);
     animation: loading 1s ease-in-out infinite;
   }
 
@@ -277,28 +280,22 @@
     }
   }
 
-  .error .input-text
+  .no-input-text.error
   {
-    background-color: rgba(var(--rouge-rgb), 0);
-  }
-
-  .error .input-text:has(input:not(:disabled)):hover,
-  .error .input-text:has(input:focus),
-  .error .no-menu-open .input-text
-  {
-    background-color: rgba(var(--rouge-rgb), .3);
-  }
-
-  .error .input-text input
-  {
-    box-shadow: 0 0 5px var(--rouge);
-    border-color: var(--rouge);
+    --primary: var(--rouge);
+    --primary-rgb: var(--rouge-rgb);
   }
 
   .text-error
   {
+    color: var(--primary);
     padding: 0 5px;
-    color: var(--rouge);
+  }
+
+  .no-input-text.error input
+  {
+    box-shadow: 0 0 5px var(--primary);
+    border-color: var(--primary);
   }
 
 </style>
