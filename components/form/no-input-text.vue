@@ -1,7 +1,7 @@
 <template>
   <span
     class="no-lib no-input-text"
-    :class="{ fullWidth }"
+    :class="{ fullWidth, error }"
     @click="componentClick"
   >
     <label v-if="isSlot">
@@ -32,6 +32,9 @@
       >
         <span class="loader" />
       </span>
+    </span>
+    <span v-if="!!error && typeof error === 'string'" class="text-error">
+      {{ error }}
     </span>
   </span>
 </template>
@@ -66,7 +69,11 @@
         default: false
       },
       loading: {
-        type: [Boolean,Number],
+        type: [Boolean, Number],
+        default: false
+      },
+      error: {
+        type: [Boolean, String],
         default: false
       },
       fullWidth: {
@@ -268,6 +275,30 @@
       right: 0;
       left: auto;
     }
+  }
+
+  .error .input-text
+  {
+    background-color: rgba(var(--rouge-rgb), 0);
+  }
+
+  .error .input-text:has(input:not(:disabled)):hover,
+  .error .input-text:has(input:focus),
+  .error .no-menu-open .input-text
+  {
+    background-color: rgba(var(--rouge-rgb), .3);
+  }
+
+  .error .input-text input
+  {
+    box-shadow: 0 0 5px var(--rouge);
+    border-color: var(--rouge);
+  }
+
+  .text-error
+  {
+    padding: 0 5px;
+    color: var(--rouge);
   }
 
 </style>
